@@ -1,0 +1,33 @@
+# Core FastAPI dependencies
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Data processing
+redis
+qdrant-client
+pydantic
+httpx
+python-dotenv
+pyyaml
+
+# OCR and Image processing
+pytesseract
+pillow
+opencv-python
+
+# Google services (Gmail)
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+
+# GitHub integration
+PyGithub
+
+# HTTP requests
+requests
+requests-oauthlib
+
+# Utilities
+numpy
+typing-extensions
