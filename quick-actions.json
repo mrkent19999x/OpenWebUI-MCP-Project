@@ -1,0 +1,172 @@
+{
+  "quick_actions": {
+    "version": "1.0",
+    "description": "Quick actions configuration for enhanced GUI"
+  },
+  "actions": [
+    {
+      "id": "new_file",
+      "label": "New File",
+      "icon": "📄",
+      "shortcut": "Ctrl+N",
+      "action": "create_file",
+      "category": "file"
+    },
+    {
+      "id": "new_folder",
+      "label": "New Folder",
+      "icon": "📁",
+      "shortcut": "Ctrl+Shift+N",
+      "action": "create_folder",
+      "category": "file"
+    },
+    {
+      "id": "save_file",
+      "label": "Save File",
+      "icon": "💾",
+      "shortcut": "Ctrl+S",
+      "action": "save_file",
+      "category": "file"
+    },
+    {
+      "id": "open_file",
+      "label": "Open File",
+      "icon": "📂",
+      "shortcut": "Ctrl+O",
+      "action": "open_file",
+      "category": "file"
+    },
+    {
+      "id": "search_files",
+      "label": "Search Files",
+      "icon": "🔍",
+      "shortcut": "Ctrl+P",
+      "action": "search_files",
+      "category": "file"
+    },
+    {
+      "id": "command_palette",
+      "label": "Command Palette",
+      "icon": "⌘",
+      "shortcut": "Ctrl+K",
+      "action": "open_command_palette",
+      "category": "general"
+    },
+    {
+      "id": "new_chat",
+      "label": "New Chat",
+      "icon": "💬",
+      "shortcut": "Ctrl+T",
+      "action": "new_chat",
+      "category": "chat"
+    },
+    {
+      "id": "switch_model",
+      "label": "Switch Model",
+      "icon": "🤖",
+      "shortcut": "Ctrl+M",
+      "action": "switch_model",
+      "category": "model"
+    },
+    {
+      "id": "toggle_sidebar",
+      "label": "Toggle Sidebar",
+      "icon": "☰",
+      "shortcut": "Ctrl+B",
+      "action": "toggle_sidebar",
+      "category": "ui"
+    },
+    {
+      "id": "toggle_theme",
+      "label": "Toggle Theme",
+      "icon": "🌓",
+      "shortcut": "Ctrl+Shift+T",
+      "action": "toggle_theme",
+      "category": "ui"
+    },
+    {
+      "id": "create_project",
+      "label": "Create Project",
+      "icon": "🚀",
+      "shortcut": "Ctrl+Shift+P",
+      "action": "create_project",
+      "category": "project"
+    },
+    {
+      "id": "run_code",
+      "label": "Run Code",
+      "icon": "▶️",
+      "shortcut": "Ctrl+Enter",
+      "action": "run_code",
+      "category": "code"
+    },
+    {
+      "id": "format_code",
+      "label": "Format Code",
+      "icon": "✨",
+      "shortcut": "Shift+Alt+F",
+      "action": "format_code",
+      "category": "code"
+    },
+    {
+      "id": "toggle_terminal",
+      "label": "Toggle Terminal",
+      "icon": "💻",
+      "shortcut": "Ctrl+`",
+      "action": "toggle_terminal",
+      "category": "terminal"
+    },
+    {
+      "id": "multi_agent_view",
+      "label": "Multi-Agent View",
+      "icon": "👥",
+      "shortcut": "Ctrl+Shift+A",
+      "action": "open_multi_agent_view",
+      "category": "agent"
+    }
+  ],
+  "categories": {
+    "file": {
+      "label": "File Operations",
+      "icon": "📁"
+    },
+    "chat": {
+      "label": "Chat",
+      "icon": "💬"
+    },
+    "model": {
+      "label": "Model",
+      "icon": "🤖"
+    },
+    "ui": {
+      "label": "Interface",
+      "icon": "🎨"
+    },
+    "project": {
+      "label": "Project",
+      "icon": "📦"
+    },
+    "code": {
+      "label": "Code",
+      "icon": "💻"
+    },
+    "terminal": {
+      "label": "Terminal",
+      "icon": "⌨️"
+    },
+    "agent": {
+      "label": "Multi-Agent",
+      "icon": "👥"
+    },
+    "general": {
+      "label": "General",
+      "icon": "⚙️"
+    }
+  },
+  "command_palette": {
+    "enabled": true,
+    "fuzzy_search": true,
+    "max_results": 10,
+    "categories": true
+  }
+}

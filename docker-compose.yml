@@ -10,6 +10,10 @@ services:
       - "${WEBUI_PORT:-3000}:8080"
     volumes:
       - open-webui-data:/app/backend/data
+      # Enhanced GUI Files (Manus AI-like)
+      - ./custom-theme.css:/app/frontend/public/custom-theme.css:ro
+      - ./workspace-config.json:/app/backend/data/workspace-config.json:ro
+      - ./quick-actions.json:/app/backend/data/quick-actions.json:ro
     environment:
       # Application Settings
       - WEBUI_URL=${WEBUI_URL:-http://localhost:3000}
