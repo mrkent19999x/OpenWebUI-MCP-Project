@@ -7,6 +7,9 @@
 - ✅ Sandbox mode để chạy code an toàn
 - ✅ API tương thích với OpenAI format
 - ✅ Nhiều model khác nhau (abab, glm, etc.)
+- ✅ **Tốc độ cực nhanh** - Multi-agent architecture
+- ✅ **Không lag** - Optimized inference và caching
+- ✅ **Thông minh** - Smart context management
 
 ### MiniMax Models Phổ Biến:
 - `abab-5.5-chat` - Model chat chính
