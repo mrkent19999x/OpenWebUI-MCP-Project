@@ -1,0 +1,50 @@
+{
+  "sandbox": {
+    "enabled": false,
+    "api_url": "https://api.minimax.chat/v1/sandbox",
+    "timeout": 30,
+    "memory_limit": "512MB",
+    "cpu_limit": "1",
+    "network_enabled": false,
+    "file_system_readonly": true,
+    "allowed_imports": [
+      "math",
+      "json",
+      "datetime",
+      "random",
+      "string",
+      "collections",
+      "itertools",
+      "functools"
+    ],
+    "blocked_imports": [
+      "os",
+      "sys",
+      "subprocess",
+      "socket",
+      "urllib",
+      "requests"
+    ]
+  },
+  "models": {
+    "default": "abab-5.5-chat",
+    "available": [
+      "abab-5.5-chat",
+      "abab-5.5s-chat",
+      "glm-4",
+      "glm-4-flash"
+    ],
+    "sandbox_enabled": [
+      "abab-5.5-chat"
+    ]
+  },
+  "api": {
+    "base_url": "https://api.minimax.chat/v1",
+    "timeout": 60,
+    "max_retries": 3,
+    "rate_limit": {
+      "requests_per_minute": 60,
+      "tokens_per_minute": 100000
+    }
+  }
+}

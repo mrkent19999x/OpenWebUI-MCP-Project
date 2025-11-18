@@ -48,6 +48,13 @@ services:
       - TASK_MODEL=${TASK_MODEL}
       - TASK_MODEL_EXTERNAL=${TASK_MODEL_EXTERNAL}
       
+      # MiniMax Configuration (OpenAI-Compatible)
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - MINIMAX_API_BASE_URL=${MINIMAX_API_BASE_URL:-https://api.minimax.chat/v1}
+      - ENABLE_MINIMAX=${ENABLE_MINIMAX:-True}
+      - MINIMAX_SANDBOX_ENABLED=${MINIMAX_SANDBOX_ENABLED:-False}
+      - MINIMAX_SANDBOX_API_URL=${MINIMAX_SANDBOX_API_URL:-https://api.minimax.chat/v1/sandbox}
+      
       # MCP (Model Context Protocol) Configuration
       - ENABLE_DIRECT_CONNECTIONS=${ENABLE_DIRECT_CONNECTIONS:-True}
       - TOOL_SERVER_CONNECTIONS=${TOOL_SERVER_CONNECTIONS}
