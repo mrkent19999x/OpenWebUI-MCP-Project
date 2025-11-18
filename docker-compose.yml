@@ -214,13 +214,40 @@ services:
     profiles:
       - with-redis
 
+  # MCP Orchestrator Service
+  orchestrator:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    container_name: orchestrator
+    restart: always
+    ports:
+      - "${ORCHESTRATOR_PORT:-8000}:8000"
+    environment:
+      - GMAIL_USER=${GMAIL_USER}
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ZALO_OA_ACCESS_TOKEN=${ZALO_OA_ACCESS_TOKEN}
+      - ZALO_OA_SECRET_KEY=${ZALO_OA_SECRET_KEY}
+    volumes:
+      - ./orchestrator/src:/app/src:ro
+    networks:
+      - open-webui-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # ChromaDB Service (optional, for external vector DB)
   chromadb:
     image: chromadb/chroma:latest
     container_name: chromadb
     restart: always
     ports:
-      - "${CHROMA_PORT:-8000}:8000"
+      - "${CHROMA_PORT:-8001}:8000"
     volumes:
       - chromadb-data:/chroma/chroma
     environment:
