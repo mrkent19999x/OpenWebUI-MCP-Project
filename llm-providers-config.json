@@ -1,0 +1,373 @@
+{
+  "llm_providers": {
+    "groq": {
+      "enabled": true,
+      "priority": 1,
+      "name": "Groq",
+      "api_key_env": "GROQ_API_KEY",
+      "base_url": "https://api.groq.com/openai/v1",
+      "models": [
+        {
+          "id": "llama-3.1-70b-versatile",
+          "name": "Llama 3.1 70B",
+          "max_tokens": 8192,
+          "tasks": ["code", "file", "general", "reasoning"]
+        },
+        {
+          "id": "mixtral-8x7b-32768",
+          "name": "Mixtral 8x7B",
+          "max_tokens": 32768,
+          "tasks": ["code", "general", "file"]
+        },
+        {
+          "id": "gemma2-9b-it",
+          "name": "Gemma 2 9B",
+          "max_tokens": 8192,
+          "tasks": ["general", "chat"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_minute": 30,
+        "tokens_per_minute": 10000
+      },
+      "timeout": 30,
+      "cost": "FREE",
+      "quota_check": true
+    },
+    "openrouter": {
+      "enabled": true,
+      "priority": 2,
+      "name": "OpenRouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "base_url": "https://openrouter.ai/api/v1",
+      "models": [
+        {
+          "id": "auto",
+          "name": "Auto Select Best",
+          "max_tokens": 4096,
+          "tasks": ["general", "reasoning", "chat"]
+        },
+        {
+          "id": "meta-llama/llama-3.1-70b-instruct",
+          "name": "Llama 3.1 70B",
+          "max_tokens": 8192,
+          "tasks": ["code", "general"]
+        },
+        {
+          "id": "mistralai/mixtral-8x7b-instruct",
+          "name": "Mixtral 8x7B",
+          "max_tokens": 32768,
+          "tasks": ["code", "general"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_day": 100,
+        "tokens_per_day": 1000000
+      },
+      "timeout": 60,
+      "cost": "FREE_TIER",
+      "quota_check": true
+    },
+    "together": {
+      "enabled": true,
+      "priority": 3,
+      "name": "Together AI",
+      "api_key_env": "TOGETHER_API_KEY",
+      "base_url": "https://api.together.xyz/v1",
+      "models": [
+        {
+          "id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+          "name": "Mixtral 8x7B",
+          "max_tokens": 32768,
+          "tasks": ["code", "general", "file"]
+        },
+        {
+          "id": "meta-llama/Llama-2-70b-chat-hf",
+          "name": "Llama 2 70B",
+          "max_tokens": 4096,
+          "tasks": ["general", "chat"]
+        },
+        {
+          "id": "codellama/CodeLlama-34b-Instruct-hf",
+          "name": "CodeLlama 34B",
+          "max_tokens": 4096,
+          "tasks": ["code"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_minute": 50,
+        "credits": 25
+      },
+      "timeout": 60,
+      "cost": "FREE_CREDITS",
+      "quota_check": true
+    },
+    "huggingface": {
+      "enabled": true,
+      "priority": 4,
+      "name": "Hugging Face",
+      "api_key_env": "HUGGINGFACE_API_KEY",
+      "base_url": "https://api-inference.huggingface.co",
+      "models": [
+        {
+          "id": "meta-llama/Llama-2-70b-chat-hf",
+          "name": "Llama 2 70B",
+          "max_tokens": 4096,
+          "tasks": ["general", "chat"]
+        },
+        {
+          "id": "mistralai/Mistral-7B-Instruct-v0.2",
+          "name": "Mistral 7B",
+          "max_tokens": 8192,
+          "tasks": ["general", "code"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_minute": 1000,
+        "unlimited": true
+      },
+      "timeout": 120,
+      "cost": "FREE",
+      "quota_check": false
+    },
+    "minimax": {
+      "enabled": true,
+      "priority": 5,
+      "name": "MiniMax",
+      "api_key_env": "MINIMAX_API_KEY",
+      "base_url": "https://api.minimax.chat/v1",
+      "models": [
+        {
+          "id": "abab-5.5-chat",
+          "name": "ABAB 5.5 Chat",
+          "max_tokens": 8192,
+          "tasks": ["general", "vietnamese", "file"]
+        },
+        {
+          "id": "glm-4",
+          "name": "GLM-4",
+          "max_tokens": 8192,
+          "tasks": ["general", "vietnamese"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_minute": 100,
+        "tokens_per_minute": 100000
+      },
+      "timeout": 60,
+      "cost": "FREE_CREDITS",
+      "quota_check": true
+    },
+    "deepseek": {
+      "enabled": true,
+      "priority": 6,
+      "name": "DeepSeek",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "base_url": "https://api.deepseek.com/v1",
+      "models": [
+        {
+          "id": "deepseek-chat",
+          "name": "DeepSeek Chat",
+          "max_tokens": 4096,
+          "tasks": ["general", "code"]
+        },
+        {
+          "id": "deepseek-coder",
+          "name": "DeepSeek Coder",
+          "max_tokens": 16384,
+          "tasks": ["code"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_minute": 50
+      },
+      "timeout": 60,
+      "cost": "FREE_TIER",
+      "quota_check": true
+    },
+    "replicate": {
+      "enabled": true,
+      "priority": 7,
+      "name": "Replicate",
+      "api_key_env": "REPLICATE_API_KEY",
+      "base_url": "https://api.replicate.com/v1",
+      "models": [
+        {
+          "id": "meta/llama-2-70b-chat",
+          "name": "Llama 2 70B",
+          "max_tokens": 4096,
+          "tasks": ["general"]
+        }
+      ],
+      "rate_limit": {
+        "credits": 5
+      },
+      "timeout": 120,
+      "cost": "FREE_CREDITS",
+      "quota_check": true
+    },
+    "perplexity": {
+      "enabled": true,
+      "priority": 8,
+      "name": "Perplexity",
+      "api_key_env": "PERPLEXITY_API_KEY",
+      "base_url": "https://api.perplexity.ai",
+      "models": [
+        {
+          "id": "llama-3.1-sonar-large-128k-online",
+          "name": "Sonar Large (Online)",
+          "max_tokens": 16384,
+          "tasks": ["search", "general"]
+        }
+      ],
+      "rate_limit": {
+        "requests_per_day": 5
+      },
+      "timeout": 60,
+      "cost": "FREE_TIER",
+      "quota_check": true
+    }
+  },
+  "failover": {
+    "enabled": true,
+    "strategy": "priority_based",
+    "max_retries": 3,
+    "retry_delay_seconds": 2,
+    "check_quota_before_use": true,
+    "auto_switch_on_error": true,
+    "error_codes_to_retry": [
+      429,
+      503,
+      500,
+      401
+    ],
+    "log_failover_events": true
+  },
+  "prompt_routing": {
+    "enabled": true,
+    "auto_detect_task": true,
+    "rules": {
+      "code_execution": {
+        "detection_keywords": ["run", "execute", "terminal", "command", "code", "python", "bash", "script"],
+        "providers": ["groq", "deepseek", "together"],
+        "preferred_models": ["llama-3.1-70b-versatile", "deepseek-coder", "codellama/CodeLlama-34b-Instruct-hf"],
+        "timeout": 60,
+        "sandbox": true
+      },
+      "file_operations": {
+        "detection_keywords": ["create", "file", "folder", "directory", "write", "read", "delete", "edit"],
+        "providers": ["groq", "openrouter", "minimax"],
+        "preferred_models": ["mixtral-8x7b-32768", "abab-5.5-chat"],
+        "timeout": 30,
+        "sandbox": true
+      },
+      "project_creation": {
+        "detection_keywords": ["project", "init", "setup", "create project", "new project"],
+        "providers": ["groq", "openrouter", "together"],
+        "preferred_models": ["llama-3.1-70b-versatile", "mixtral-8x7b-32768"],
+        "timeout": 60,
+        "sandbox": true
+      },
+      "general_chat": {
+        "detection_keywords": ["chat", "talk", "conversation", "ask", "question"],
+        "providers": ["openrouter", "groq", "together", "minimax"],
+        "preferred_models": ["auto", "llama-3.1-70b-versatile"],
+        "timeout": 30,
+        "sandbox": false
+      },
+      "vietnamese": {
+        "detection_keywords": ["tiếng việt", "vietnamese", "việt nam"],
+        "providers": ["minimax", "groq", "openrouter"],
+        "preferred_models": ["abab-5.5-chat", "glm-4"],
+        "timeout": 30,
+        "sandbox": false
+      },
+      "search": {
+        "detection_keywords": ["search", "find", "tìm", "lookup", "google"],
+        "providers": ["perplexity", "openrouter"],
+        "preferred_models": ["llama-3.1-sonar-large-128k-online"],
+        "timeout": 60,
+        "sandbox": false
+      },
+      "reasoning": {
+        "detection_keywords": ["analyze", "think", "reason", "solve", "calculate"],
+        "providers": ["groq", "openrouter", "together"],
+        "preferred_models": ["llama-3.1-70b-versatile", "mixtral-8x7b-32768"],
+        "timeout": 60,
+        "sandbox": false
+      }
+    }
+  },
+  "code_execution": {
+    "enabled": true,
+    "sandbox": true,
+    "timeout": 300,
+    "memory_limit": "512MB",
+    "cpu_limit": 1,
+    "allowed_commands": [
+      "python",
+      "node",
+      "bash",
+      "sh",
+      "git",
+      "npm",
+      "pip"
+    ],
+    "blocked_commands": [
+      "rm -rf",
+      "format",
+      "del",
+      "delete"
+    ],
+    "auto_save": true,
+    "show_output": true
+  },
+  "file_operations": {
+    "enabled": true,
+    "auto_create_directories": true,
+    "max_file_size": "10MB",
+    "allowed_extensions": [
+      ".py",
+      ".js",
+      ".ts",
+      ".json",
+      ".md",
+      ".txt",
+      ".yml",
+      ".yaml",
+      ".html",
+      ".css"
+    ],
+    "show_preview": true,
+    "auto_format": true
+  },
+  "gui": {
+    "terminal": {
+      "enabled": true,
+      "theme": "dark",
+      "show_timestamps": true,
+      "max_output_lines": 1000,
+      "auto_scroll": true
+    },
+    "file_tree": {
+      "enabled": true,
+      "show_hidden": false,
+      "icons": true,
+      "auto_refresh": true
+    },
+    "code_editor": {
+      "enabled": true,
+      "syntax_highlighting": true,
+      "line_numbers": true,
+      "auto_complete": true,
+      "theme": "monokai"
+    },
+    "notifications": {
+      "enabled": true,
+      "show_success": true,
+      "show_errors": true,
+      "show_warnings": true,
+      "auto_hide": 5
+    }
+  }
+}
