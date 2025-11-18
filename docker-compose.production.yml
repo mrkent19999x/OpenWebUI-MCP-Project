@@ -58,16 +58,44 @@ services:
       - MINIMAX_SANDBOX_ENABLED=${MINIMAX_SANDBOX_ENABLED:-False}
       - MINIMAX_SANDBOX_API_URL=${MINIMAX_SANDBOX_API_URL:-https://api.minimax.chat/v1/sandbox}
       
-      # Performance - Production Settings
+      # Performance - Production Settings (MiniMax-like Optimization)
       - ENABLE_REALTIME_CHAT_SAVE=False
       - CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE=10
       - THREAD_POOL_SIZE=100
-      - MODELS_CACHE_TTL=60
+      - MODELS_CACHE_TTL=3600
       - AIOHTTP_CLIENT_TIMEOUT=600
+      
+      # Advanced Caching (MiniMax-like)
+      - ENABLE_RESPONSE_CACHE=True
+      - RESPONSE_CACHE_TTL=3600
+      - ENABLE_CONTEXT_CACHE=True
+      - CONTEXT_CACHE_TTL=7200
+      - ENABLE_FILE_OPERATIONS_CACHE=True
+      
+      # Async Processing (Multi-Agent like)
+      - ENABLE_ASYNC_PROCESSING=True
+      - ASYNC_WORKER_THREADS=10
+      - ENABLE_BACKGROUND_TASKS=True
+      - MAX_CONCURRENT_REQUESTS=100
+      
+      # Streaming Optimization
+      - ENABLE_STREAMING=True
+      - STREAMING_CHUNK_SIZE=10
+      - ENABLE_PROGRESSIVE_RENDERING=True
       
       # Redis WebSocket
       - ENABLE_WEBSOCKET_SUPPORT=True
       - REDIS_URL=redis://redis:6379
+      
+      # Connection Pooling
+      - ENABLE_CONNECTION_POOLING=True
+      - CONNECTION_POOL_SIZE=50
+      - CONNECTION_POOL_MAX_OVERFLOW=20
+      
+      # Memory Optimization
+      - ENABLE_MEMORY_OPTIMIZATION=True
+      - MEMORY_CACHE_SIZE=512MB
+      - ENABLE_MEMORY_POOLING=True
       
       # Vector DB
       - VECTOR_DB=qdrant

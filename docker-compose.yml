@@ -59,18 +59,48 @@ services:
       - ENABLE_DIRECT_CONNECTIONS=${ENABLE_DIRECT_CONNECTIONS:-True}
       - TOOL_SERVER_CONNECTIONS=${TOOL_SERVER_CONNECTIONS}
       
-      # Performance Settings - REALTIME
+      # Performance Settings - Optimized for MiniMax-like Performance
       - ENABLE_REALTIME_CHAT_SAVE=${ENABLE_REALTIME_CHAT_SAVE:-False}
-      - CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE=${CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE:-1}
-      - THREAD_POOL_SIZE=${THREAD_POOL_SIZE:-0}
-      - MODELS_CACHE_TTL=${MODELS_CACHE_TTL:-1}
+      - CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE=${CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE:-10}
+      - THREAD_POOL_SIZE=${THREAD_POOL_SIZE:-100}
+      - MODELS_CACHE_TTL=${MODELS_CACHE_TTL:-3600}
       
-      # Timeout Settings
-      - AIOHTTP_CLIENT_TIMEOUT=${AIOHTTP_CLIENT_TIMEOUT:-300}
-      - AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST=${AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST:-10}
+      # Advanced Caching (MiniMax-like)
+      - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE:-True}
+      - RESPONSE_CACHE_TTL=${RESPONSE_CACHE_TTL:-3600}
+      - ENABLE_CONTEXT_CACHE=${ENABLE_CONTEXT_CACHE:-True}
+      - CONTEXT_CACHE_TTL=${CONTEXT_CACHE_TTL:-7200}
+      - ENABLE_FILE_OPERATIONS_CACHE=${ENABLE_FILE_OPERATIONS_CACHE:-True}
+      
+      # Async Processing (Multi-Agent like)
+      - ENABLE_ASYNC_PROCESSING=${ENABLE_ASYNC_PROCESSING:-True}
+      - ASYNC_WORKER_THREADS=${ASYNC_WORKER_THREADS:-10}
+      - ENABLE_BACKGROUND_TASKS=${ENABLE_BACKGROUND_TASKS:-True}
+      - MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-100}
+      
+      # Streaming Optimization
+      - ENABLE_STREAMING=${ENABLE_STREAMING:-True}
+      - STREAMING_CHUNK_SIZE=${STREAMING_CHUNK_SIZE:-10}
+      - ENABLE_PROGRESSIVE_RENDERING=${ENABLE_PROGRESSIVE_RENDERING:-True}
+      
+      # Timeout Settings (Optimized)
+      - AIOHTTP_CLIENT_TIMEOUT=${AIOHTTP_CLIENT_TIMEOUT:-600}
+      - AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST=${AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST:-30}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-300}
       
       # WebSocket & Redis (for realtime features)
-      - ENABLE_WEBSOCKET_SUPPORT=${ENABLE_WEBSOCKET_SUPPORT:-False}
+      - ENABLE_WEBSOCKET_SUPPORT=${ENABLE_WEBSOCKET_SUPPORT:-True}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      
+      # Connection Pooling
+      - ENABLE_CONNECTION_POOLING=${ENABLE_CONNECTION_POOLING:-True}
+      - CONNECTION_POOL_SIZE=${CONNECTION_POOL_SIZE:-50}
+      - CONNECTION_POOL_MAX_OVERFLOW=${CONNECTION_POOL_MAX_OVERFLOW:-20}
+      
+      # Memory Optimization
+      - ENABLE_MEMORY_OPTIMIZATION=${ENABLE_MEMORY_OPTIMIZATION:-True}
+      - MEMORY_CACHE_SIZE=${MEMORY_CACHE_SIZE:-512MB}
+      - ENABLE_MEMORY_POOLING=${ENABLE_MEMORY_POOLING:-True}
       
       # Vector Database
       - VECTOR_DB=${VECTOR_DB:-chroma}
@@ -159,7 +189,7 @@ services:
     #           count: all
     #           capabilities: [gpu]
 
-  # Redis Service (optional, for WebSocket load balancing)
+  # Redis Service (optimized for caching and WebSocket)
   redis:
     image: redis:7-alpine
     container_name: open-webui-redis
@@ -168,9 +198,15 @@ services:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
     networks:
       - open-webui-network
-    command: redis-server --appendonly yes
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     profiles:
       - with-redis
 
