@@ -1,0 +1,197 @@
+# OpenWebUI-MCP-Project - Enhanced Sandbox Environment
+# Equivalent to Manus AI Capabilities
+
+version: '3.8'
+
+services:
+  # Original OpenWebUI Services
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    restart: unless-stopped
+    ports:
+      - "7860:8080"
+    volumes:
+      - openwebui_data:/app/backend/data
+      - ./config:/app/backend/data/data
+    environment:
+      - WEBUI_SECRET_KEY=your-secret-key-here
+      - WEBUI_JWT_SECRET_KEY=jwt-secret-key-here
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DATA_DIR=/app/backend/data
+      - MCP_SERVER_URL=http://mcp-server:8000
+      - CODE_EXECUTOR_URL=http://code-executor:5000
+    depends_on:
+      - litellm
+      - ollama
+      - redis
+      - postgres
+      - code-executor
+      - mcp-server
+    networks:
+      - ai-network
+
+  # Code Execution Service (equivalent to Manus AI sandbox)
+  code-executor:
+    build:
+      context: ./code-executor
+      dockerfile: Dockerfile
+    container_name: code-executor
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - code_executions:/app/executions
+      - /var/run/docker.sock:/var/run/docker.sock  # For container isolation
+    environment:
+      - EXECUTION_TIMEOUT=300
+      - MAX_MEMORY=512MB
+      - ALLOWED_LANGUAGES=python,nodejs,bash,sh
+      - SECURITY_LEVEL=high
+    networks:
+      - ai-network
+    ulimits:
+      memlock: -1
+      nproc: 64
+
+  # MCP Server for GitHub Operations
+  mcp-server:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    container_name: mcp-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./mcp-data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_USERNAME=${GITHUB_USERNAME}
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      - postgres
+    networks:
+      - ai-network
+
+  # Web Automation Service (equivalent to Manus AI browser)
+  web-automation:
+    image: mcr.microsoft.com/playwright/python:v1.40.0-jammy
+    container_name: web-automation
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - web_automation_data:/app/automation
+      - ./scripts:/app/scripts
+    environment:
+      - BROWSER_TIMEOUT=30000
+      - MAX_CONCURRENT_TABS=10
+      - HEADLESS_MODE=true
+    networks:
+      - ai-network
+    depends_on:
+      - code-executor
+
+  # Auto-Deployment Service
+  auto-deployer:
+    image: nginx:alpine
+    container_name: auto-deployer
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - deploy_data:/var/www/html
+      - ./deploy-config:/etc/nginx/conf.d
+    environment:
+      - DEPLOY_DOMAIN=${DEPLOY_DOMAIN:-localhost}
+      - SSL_ENABLED=true
+    networks:
+      - ai-network
+    depends_on:
+      - code-executor
+      - mcp-server
+
+  # File Management Service
+  file-manager:
+    image: minio/minio:latest
+    container_name: file-manager
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - file_storage:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+    command: server /data --console-address ":9001"
+    networks:
+      - ai-network
+
+  # Supporting Services (from original config)
+  litellm:
+    image: ghcr.io/berriai/litellm:main
+    container_name: litellm
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm/config.yaml:/app/config.yaml
+    environment:
+      - DATABASE_URL=postgresql://openwebui:openwebui@postgres:5432/openwebui
+    networks:
+      - ai-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - ai-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - ai-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=openwebui
+      - POSTGRES_USER=openwebui
+      - POSTGRES_PASSWORD=openwebui
+    networks:
+      - ai-network
+
+volumes:
+  openwebui_data:
+  code_executions:
+  web_automation_data:
+  deploy_data:
+  file_storage:
+  ollama_data:
+  postgres_data:
+
+networks:
+  ai-network:
+    driver: bridge
