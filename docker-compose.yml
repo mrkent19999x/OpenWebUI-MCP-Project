@@ -12,8 +12,11 @@ services:
       - open-webui-data:/app/backend/data
       # Enhanced GUI Files (Manus AI-like)
       - ./custom-theme.css:/app/frontend/public/custom-theme.css:ro
+      - ./hide-terminal-theme.css:/app/frontend/public/hide-terminal-theme.css:ro
       - ./workspace-config.json:/app/backend/data/workspace-config.json:ro
       - ./quick-actions.json:/app/backend/data/quick-actions.json:ro
+      - ./code-preview-component.js:/app/frontend/public/code-preview-component.js:ro
+      - ./ui-optimization-config.json:/app/backend/data/ui-optimization-config.json:ro
     environment:
       # Application Settings
       - WEBUI_URL=${WEBUI_URL:-http://localhost:3000}

@@ -1,0 +1,130 @@
+{
+  "ui_optimization": {
+    "description": "Tối ưu UI - Ẩn terminal, chỉ hiện chat panel, preview code trong chat",
+    "hide_terminal": {
+      "enabled": true,
+      "description": "Ẩn terminal commands để tối ưu diện tích và giảm lag",
+      "hide_command_output": true,
+      "hide_terminal_panel": true,
+      "show_only_chat": true,
+      "minimal_ui": true
+    },
+    "chat_panel": {
+      "enabled": true,
+      "fullscreen": true,
+      "hide_sidebar": false,
+      "hide_header": false,
+      "compact_mode": true,
+      "show_preview_in_chat": true,
+      "show_code_in_chat": true,
+      "show_file_tree_in_chat": false
+    },
+    "code_preview": {
+      "enabled": true,
+      "description": "Preview code và tạo file TRONG chat panel",
+      "show_in_chat": true,
+      "syntax_highlighting": true,
+      "line_numbers": false,
+      "copy_button": true,
+      "edit_button": false,
+      "run_button": false,
+      "max_height": "400px",
+      "auto_expand": false,
+      "theme": "github"
+    },
+    "file_generation": {
+      "enabled": true,
+      "description": "Sinh code và tạo file TRONG OpenWebUI",
+      "show_preview_before_create": true,
+      "auto_create_on_approve": true,
+      "show_file_tree_after_create": true,
+      "notifications": {
+        "file_created": true,
+        "file_modified": true,
+        "show_toast": true,
+        "auto_hide": 3
+      },
+      "supported_types": [
+        "python",
+        "javascript",
+        "typescript",
+        "json",
+        "markdown",
+        "html",
+        "css",
+        "yaml",
+        "dockerfile",
+        "shell"
+      ]
+    },
+    "performance": {
+      "lazy_load": true,
+      "virtual_scroll": true,
+      "debounce_preview": 300,
+      "cache_previews": true,
+      "max_preview_size": "1MB",
+      "reduce_animations": true,
+      "disable_unused_features": true
+    }
+  },
+  "code_generation": {
+    "enabled": true,
+    "modes": {
+      "preview_only": {
+        "enabled": true,
+        "description": "Chỉ preview code, không tự động tạo file",
+        "user_approval_required": true
+      },
+      "auto_create": {
+        "enabled": false,
+        "description": "Tự động tạo file sau khi preview",
+        "user_approval_required": false
+      },
+      "interactive": {
+        "enabled": true,
+        "description": "Preview → User approve → Create",
+        "user_approval_required": true,
+        "show_diff": true
+      }
+    },
+    "default_mode": "interactive",
+    "templates": {
+      "python": {
+        "shebang": "#!/usr/bin/env python3",
+        "encoding": "# -*- coding: utf-8 -*-",
+        "docstring": true
+      },
+      "javascript": {
+        "use_strict": false,
+        "module": false
+      },
+      "typescript": {
+        "strict": true,
+        "module": "esnext"
+      }
+    }
+  },
+  "preview_features": {
+    "code_block": {
+      "enabled": true,
+      "show_language": true,
+      "show_line_count": true,
+      "copy_button": true,
+      "download_button": false,
+      "format_button": true
+    },
+    "file_tree_preview": {
+      "enabled": true,
+      "show_structure": true,
+      "show_file_sizes": false,
+      "expand_all": false,
+      "max_depth": 3
+    },
+    "diff_view": {
+      "enabled": true,
+      "show_changes": true,
+      "highlight_changes": true,
+      "side_by_side": false
+    }
+  }
+}
