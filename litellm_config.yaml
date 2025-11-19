@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 model_list:
   - model_name: gpt-4
     litellm_params:
@@ -16,3 +17,331 @@ general_settings:
   master_key: sk-litellm-1234567890abcdef
   database_url: postgresql://postgres:password@postgres:5432/litellm
   redis_url: redis://redis:6379/0
+=======
+# LiteLLM Configuration - 100+ AI Models Integration
+# Central AI Dashboard Configuration
+
+general_settings:
+  master_key: ${LITELLM_MASTER_KEY:-sk-litellm-master-key}
+  database_url: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-litellm}
+  redis_url: ${REDIS_URL:-redis://redis:6379/1}
+  allowed_origins: ["*"]
+  cors_origin: "*"
+  global_rate_limit: "1000/minute"
+
+model_list:
+  # OpenAI Models (via OpenAI API)
+  - model_name: gpt-4-turbo
+    litellm_params:
+      model: openai/gpt-4-turbo
+      api_key: ${OPENAI_API_KEY}
+  
+  - model_name: gpt-4
+    litellm_params:
+      model: openai/gpt-4
+      api_key: ${OPENAI_API_KEY}
+  
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: ${OPENAI_API_KEY}
+  
+  - model_name: gpt-3.5-turbo
+    litellm_params:
+      model: openai/gpt-3.5-turbo
+      api_key: ${OPENAI_API_KEY}
+
+  # Anthropic Claude Models (via Anthropic API)
+  - model_name: claude-3-opus
+    litellm_params:
+      model: anthropic/claude-3-opus
+      api_key: ${ANTHROPIC_API_KEY}
+  
+  - model_name: claude-3-sonnet
+    litellm_params:
+      model: anthropic/claude-3-sonnet
+      api_key: ${ANTHROPIC_API_KEY}
+  
+  - model_name: claude-3-haiku
+    litellm_params:
+      model: anthropic/claude-3-haiku
+      api_key: ${ANTHROPIC_API_KEY}
+
+  # Google AI Models
+  - model_name: gemini-pro
+    litellm_params:
+      model: google/gemini-pro
+      api_key: ${GOOGLE_API_KEY}
+  
+  - model_name: gemini-pro-vision
+    litellm_params:
+      model: google/gemini-pro-vision
+      api_key: ${GOOGLE_API_KEY}
+
+  # MiniMax Models (Vietnamese Support)
+  - model_name: minimax-abab6.5-chat
+    litellm_params:
+      model: minimax/abab6.5-chat
+      api_key: ${MINIMAX_API_KEY}
+      api_base: ${MINIMAX_API_BASE_URL:-https://api.minimax.chat/v1}
+
+  # Mistral AI Models
+  - model_name: mistral-tiny
+    litellm_params:
+      model: mistral/mistral-tiny
+      api_key: ${MISTRAL_API_KEY}
+  
+  - model_name: mistral-small
+    litellm_params:
+      model: mistral/mistral-small
+      api_key: ${MISTRAL_API_KEY}
+  
+  - model_name: mistral-medium
+    litellm_params:
+      model: mistral/mistral-medium
+      api_key: ${MISTRAL_API_KEY}
+
+  # Meta Llama Models (via Anthropic, OpenRouter, or Replicate)
+  - model_name: llama-2-70b
+    litellm_params:
+      model: meta-llama/llama-2-70b
+      api_key: ${REPLICATE_API_TOKEN}
+      api_base: https://api.replicate.com/v1
+
+  - model_name: llama-3-70b
+    litellm_params:
+      model: meta-llama/llama-3-70b
+      api_key: ${REPLICATE_API_TOKEN}
+      api_base: https://api.replicate.com/v1
+
+  # Cohere Models
+  - model_name: command-r-plus
+    litellm_params:
+      model: cohere/command-r-plus
+      api_key: ${COHERE_API_KEY}
+
+  # HuggingFace Models
+  - model_name: mistral-7b-instruct
+    litellm_params:
+      model: huggingface/mistral-7b-instruct
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  - model_name: llama-2-7b-chat
+    litellm_params:
+      model: huggingface/llama-2-7b-chat-hf
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Perplexity Models
+  - model_name: pplx-70b-online
+    litellm_params:
+      model: perplexity/pplx-70b-online
+      api_key: ${PERPLEXITY_API_KEY}
+
+  # Groq Models (Ultra-fast inference)
+  - model_name: mixtral-8x7b-32768
+    litellm_params:
+      model: groq/mixtral-8x7b-32768
+      api_key: ${GROQ_API_KEY}
+
+  - model_name: llama2-70b-4096
+    litellm_params:
+      model: groq/llama2-70b-4096
+      api_key: ${GROQ_API_KEY}
+
+  # OpenRouter Models (Access to many providers)
+  - model_name: gpt-4-1106-preview
+    litellm_params:
+      model: openrouter/gpt-4-1106-preview
+      api_key: ${OPENROUTER_API_KEY}
+
+  # Voyage AI Models
+  - model_name: voyage-code
+    litellm_params:
+      model: voyage/voyage-code
+      api_key: ${VOYAGE_API_KEY}
+
+  # AI21 Models
+  - model_name: j2-ultra
+    litellm_params:
+      model: ai21/j2-ultra
+      api_key: ${AI21_API_KEY}
+
+  # OpenSource Models (via Together AI)
+  - model_name: deepseek-coder-33b
+    litellm_params:
+      model: together_ai/deepseek-ai/deepseek-coder-33b
+      api_key: ${TOGETHER_API_KEY}
+
+  # Fireworks AI Models
+  - model_name: llama-v2-70b
+    litellm_params:
+      model: fireworks/llama-v2-70b
+      api_key: ${FIREWORKS_API_KEY}
+
+  # Additional Local/Ollama Models (if running locally)
+  - model_name: llama3
+    litellm_params:
+      model: openai/llama3
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  - model_name: codellama
+    litellm_params:
+      model: openai/codellama
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  - model_name: mistral
+    litellm_params:
+      model: openai/mistral
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  - model_name: phi3
+    litellm_params:
+      model: openai/phi3
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  - model_name: qwen
+    litellm_params:
+      model: openai/qwen
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  - model_name: dolphin
+    litellm_params:
+      model: openai/dolphin
+      api_base: http://ollama:11434/v1
+      api_key: dummy
+
+  # Vietnamese Optimized Models
+  - model_name: viet-llm-7b
+    litellm_params:
+      model: viet-llm/viet-llm-7b
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Code-Focused Models
+  - model_name: codestral
+    litellm_params:
+      model: codestral/codestral
+      api_key: ${CODESTRAL_API_KEY}
+
+  # Multimodal Models
+  - model_name: gpt-4-vision
+    litellm_params:
+      model: openai/gpt-4-vision-preview
+      api_key: ${OPENAI_API_KEY}
+
+  # Fast Inference Models
+  - model_name: gpt-3.5-turbo-instruct
+    litellm_params:
+      model: openai/gpt-3.5-turbo-instruct
+      api_key: ${OPENAI_API_KEY}
+
+  # Specialized Models
+  - model_name: math
+    litellm_params:
+      model: trelis/Math-Shepherd-Mistral-7B-CoT
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Vietnamese Business Models
+  - model_name: viet-business-llm
+    litellm_params:
+      model: vietnamese-llm/viet-business-llm-13b
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Long Context Models
+  - model_name: claude-3-sonnet-200k
+    litellm_params:
+      model: anthropic/claude-3-sonnet-200k
+      api_key: ${ANTHROPIC_API_KEY}
+
+  # Domain-Specific Models
+  - model_name: medical-llm
+    litellm_params:
+      model: medical-llm/medical-llm-7b
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Research Models
+  - model_name: research-llama
+    litellm_params:
+      model: research-llm/research-llama-13b
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+  # Creative Writing Models
+  - model_name: creative-llm
+    litellm_params:
+      model: creative-llm/creative-writing-7b
+      api_key: ${HUGGINGFACE_API_KEY}
+      api_base: ${HUGGINGFACE_API_BASE_URL}
+
+litellm_settings:
+  database_url: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-litellm}
+  4
+  redis_url: ${REDIS_URL:-redis://redis:6379/1}
+  
+  # Performance Settings
+  max_batch_size: ${LITELLM_MAX_BATCH_SIZE:-10}
+  max_concurrent_requests: ${LITELLM_MAX_CONCURRENT_REQUESTS:-100}
+  requests_per_minute: ${LITELLM_REQUESTS_PER_MINUTE:-1000}
+  
+  # Memory Management
+  disable_waterfall: false
+  enable_prometheus_metrics: true
+  
+  # Rate Limiting
+  global_rate_limit: "1000/minute"
+  
+  # Logging
+  logging: 
+    level: ${LITELLM_LOG_LEVEL:-INFO}
+    config_file_path: "/app/logs/litellm.log"
+  
+  # Health Check
+  health_check_interval: 30
+
+  # Stream responses
+  stream: true
+  
+  # Database configuration
+  enable_logging_to_db: true
+  
+  # User tracking
+  enable_user_audit_logging: true
+
+# Custom routing for different use cases
+router_settings:
+  routing_strategy: "latency-based"
+  fallbacks:
+    - gpt-3.5-turbo
+    - claude-3-haiku
+  model_group_alias:
+    "gpt-4-models":
+      - gpt-4
+      - gpt-4-turbo
+      - gpt-4o
+    "claude-models":
+      - claude-3-opus
+      - claude-3-sonnet
+      - claude-3-haiku
+    "local-models":
+      - llama3
+      - mistral
+      - phi3
+    "fast-models":
+      - gpt-3.5-turbo
+      - claude-3-haiku
+      - mistral-tiny
+    "vietnamese-models":
+      - minimax-abab6.5-chat
+      - viet-llm-7b
+      - viet-business-llm
+>>>>>>> 94195001179a5fbe644cd74609eb37acfd8482fe
