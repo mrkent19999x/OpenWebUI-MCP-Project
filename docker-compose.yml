@@ -87,8 +87,8 @@ services:
       - ENABLE_WEB_BROWSER=${ENABLE_WEB_BROWSER:-True}
       - BROWSER_AUTOMATION_URL=${BROWSER_AUTOMATION_URL:-http://browser-automation:4444}
       
-      # Database (Optional - nếu dùng PostgreSQL)
-      - DATABASE_URL=${DATABASE_URL:-}
+      # Database (Để trống để dùng SQLite mặc định, hoặc set DATABASE_URL nếu dùng PostgreSQL)
+      # - DATABASE_URL=${DATABASE_URL:-}
       
       # Redis
       - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
@@ -160,6 +160,7 @@ services:
       sh -c "
         apk add --no-cache python3 py3-pip &&
         pip3 install --break-system-packages requests beautifulsoup4 pandas numpy &&
+        npm install &&
         node server.js
       "
     networks:
