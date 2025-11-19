@@ -1,18 +1,19 @@
 version: '3.8'
 
 services:
-  # OpenWebUI Service - MERGED: OpenWebUI-MCP-Project + Openwwebui (MiniMax)
-  # Config hiện tại của anh: OLLAMA_BASE_URL, WEBUI_URL, WEBUI_NAME
+  # OpenWebUI Main Service - Optimized Version
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
-    restart: always
+    restart: unless-stopped
     ports:
-      - "7860:8080"  # Port hiện tại của anh
+      - "${PORT:-7860}:8080"
     volumes:
-      # Mount ổ 500GB của anh (giữ nguyên data)
-      - /home/mrkent/openwebui-storage/openwebui-data:/app/backend/data
-      # Enhanced GUI Files (Manus AI-like)
+      # Data persistence
+      - openwebui-data:/app/backend/data
+      - openwebui-cache:/app/backend/cache
+      
+      # Enhanced GUI Files (Manus AI-like features)
       - ./custom-theme.css:/app/frontend/public/custom-theme.css:ro
       - ./hide-terminal-theme.css:/app/frontend/public/hide-terminal-theme.css:ro
       - ./workspace-config.json:/app/backend/data/workspace-config.json:ro
@@ -21,51 +22,55 @@ services:
       - ./ui-optimization-config.json:/app/backend/data/ui-optimization-config.json:ro
       - ./prompt-templates.json:/app/backend/data/prompt-templates.json:ro
       - ./system-prompts.json:/app/backend/data/system-prompts.json:ro
-    environment:
-      # Application Settings - Config của anh
-      - WEBUI_URL=${WEBUI_URL:-http://192.168.1.176:7860}
-      - WEBUI_NAME=${WEBUI_NAME:-Open WebUI - 24/7}
-      - PORT=8080
-      - ENV=${ENV:-prod}
       
-      # Authentication & Security
-      - WEBUI_AUTH=${WEBUI_AUTH:-False}
-      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-t0p-s3cr3t}
-      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-4w}
-      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-True}
-      - ENABLE_PERSISTENT_CONFIG=${ENABLE_PERSISTENT_CONFIG:-True}
-      - DEFAULT_USER_ROLE=${DEFAULT_USER_ROLE:-pending}
+      # Configuration files (Organized structure)
+      - ./config/prompts:/app/backend/data/prompts:ro
+      - ./config/cursor:/app/backend/data/cursor:ro
+      - ./config/ui:/app/backend/data/ui:ro
+    environment:
+      # Application settings
+      - WEBUI_URL=${WEBUI_URL:-http://localhost:7860}
+      - WEBUI_NAME=${WEBUI_NAME:-Open WebUI - Manus AI Equivalent}
+      - ENV=${ENV:-production}
+      - PORT=8080
+      
+      # API Keys
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
       
       # Vietnamese Language Support
       - DEFAULT_LOCALE=${DEFAULT_LOCALE:-vi}
       - ENABLE_LOGIN_FORM=${ENABLE_LOGIN_FORM:-True}
       
-      # Session Management
-      - WEBUI_SESSION_COOKIE_SAME_SITE=${WEBUI_SESSION_COOKIE_SAME_SITE:-lax}
-      - WEBUI_AUTH_COOKIE_SAME_SITE=${WEBUI_AUTH_COOKIE_SAME_SITE:-lax}
+      # Security & Authentication
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_AUTH=${WEBUI_AUTH:-False}
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-True}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-4w}
       
-      # CORS Configuration
-      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN:-*}
+      # Database (SQLite default, PostgreSQL optional)
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./openwebui.db}
       
-      # Ollama Configuration - External Ollama của anh
-      - ENABLE_OLLAMA_API=${ENABLE_OLLAMA_API:-True}
-      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
-      - USE_OLLAMA_DOCKER=${USE_OLLAMA_DOCKER:-false}
-      
-      # MiniMax Configuration
-      - MINIMAX_API_BASE_URL=${MINIMAX_API_BASE_URL:-https://api.minimax.chat/v1}
-      - ENABLE_MINIMAX=${ENABLE_MINIMAX:-True}
-      - MINIMAX_SANDBOX_ENABLED=${MINIMAX_SANDBOX_ENABLED:-False}
-      - MINIMAX_SANDBOX_API_URL=${MINIMAX_SANDBOX_API_URL:-https://api.minimax.chat/v1/sandbox}
-      
-      # File Upload
-      - ENABLE_FILE_UPLOAD=${ENABLE_FILE_UPLOAD:-True}
+      # Performance & Limits
+      - MAX_WORKERS=${MAX_WORKERS:-4}
+      - TIMEOUT=${TIMEOUT:-300}
       - MAX_FILE_SIZE=${MAX_FILE_SIZE:-104857600}
-      - ALLOWED_FILE_EXTENSIONS=${ALLOWED_FILE_EXTENSIONS:-.txt,.pdf,.doc,.docx,.xls,.xlsx,.csv,.json,.md,.py,.js,.html,.css}
-      
-      # Image Upload & Vision
-      - ENABLE_IMAGE_UPLOAD=${ENABLE_IMAGE_UPLOAD:-True}
+      - CACHE_SIZE=${CACHE_SIZE:-1GB}
       - MAX_IMAGE_SIZE=${MAX_IMAGE_SIZE:-10485760}
+      
+      # Features
+      - ENABLE_OLLAMA=${ENABLE_OLLAMA:-True}
+      - ENABLE_BROWSER=${ENABLE_WEB_BROWSER:-True}
+      - ENABLE_CODE_EXECUTION=${ENABLE_CODE_EXECUTION:-True}
+      - HIDE_TERMINAL_BY_DEFAULT=${HIDE_TERMINAL_BY_DEFAULT:-True}
+      
+      # File Upload & Management
+      - ENABLE_FILE_UPLOAD=${ENABLE_FILE_UPLOAD:-True}
+      - ENABLE_IMAGE_UPLOAD=${ENABLE_IMAGE_UPLOAD:-True}
+      - ALLOWED_FILE_EXTENSIONS=${ALLOWED_FILE_EXTENSIONS:-.txt,.pdf,.doc,.docx,.xls,.xlsx,.csv,.json,.md,.py,.js,.html,.css}
       - ALLOWED_IMAGE_EXTENSIONS=${ALLOWED_IMAGE_EXTENSIONS:-.jpg,.jpeg,.png,.gif,.webp}
       
       # Knowledge Base & RAG
@@ -77,36 +82,72 @@ services:
       - ENABLE_AGENTS=${ENABLE_AGENTS:-True}
       - ENABLE_TOOLS=${ENABLE_TOOLS:-True}
       
-      # Code Execution
-      - ENABLE_CODE_EXECUTION=${ENABLE_CODE_EXECUTION:-True}
+      # Session Management
+      - WEBUI_SESSION_COOKIE_SAME_SITE=${WEBUI_SESSION_COOKIE_SAME_SITE:-lax}
+      - WEBUI_AUTH_COOKIE_SAME_SITE=${WEBUI_AUTH_COOKIE_SAME_SITE:-lax}
+      
+      # CORS Configuration
+      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN:-*}
+      
+      # Ollama Configuration
+      - ENABLE_OLLAMA_API=${ENABLE_OLLAMA_API:-True}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - USE_OLLAMA_DOCKER=${USE_OLLAMA_DOCKER:-false}
+      
+      # MiniMax Configuration
+      - MINIMAX_API_BASE_URL=${MINIMAX_API_BASE_URL:-https://api.minimax.chat/v1}
+      - ENABLE_MINIMAX=${ENABLE_MINIMAX:-True}
+      - MINIMAX_SANDBOX_ENABLED=${MINIMAX_SANDBOX_ENABLED:-False}
+      
+      # Code Execution Integration
       - JUPYTER_URL=${JUPYTER_URL:-http://jupyter:8888}
       - JUPYTER_TOKEN=${JUPYTER_TOKEN:-manus-code-sandbox-2024}
       - CODE_EXECUTOR_URL=${CODE_EXECUTOR_URL:-http://code-executor:3001}
       
-      # Web Browser
-      - ENABLE_WEB_BROWSER=${ENABLE_WEB_BROWSER:-True}
+      # Web Browser Integration
       - BROWSER_AUTOMATION_URL=${BROWSER_AUTOMATION_URL:-http://browser-automation:4444}
       
-      # Database (Để trống để dùng SQLite mặc định, hoặc set DATABASE_URL nếu dùng PostgreSQL)
-      # - DATABASE_URL=${DATABASE_URL:-}
-      
-      # Redis
+      # Redis Configuration
       - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      
+      # Multi-agent settings
+      - AGENT_TIMEOUT=${AGENT_TIMEOUT:-60}
+      - MAX_CONCURRENT_AGENTS=${MAX_CONCURRENT_AGENTS:-8}
+      - AGENT_POOL_SIZE=${AGENT_POOL_SIZE:-16}
+      
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - AUDIT_LOGGING=${AUDIT_LOGGING:-True}
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-4g}
+          cpus: ${CPU_LIMIT:-2.0}
+        reservations:
+          memory: 2g
+          cpus: 1.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - openwebui-network
     depends_on:
       - redis
       - jupyter
       - browser-automation
       - code-executor
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    networks:
-      - openwebui-network
+      - mcp-server
 
   # Jupyter Lab - Code Execution Environment
   jupyter:
     image: jupyter/minimal-notebook:latest
     container_name: jupyter-sandbox
-    restart: always
+    restart: unless-stopped
     ports:
       - "8888:8888"
     volumes:
@@ -124,7 +165,7 @@ services:
   browser-automation:
     image: seleniarm/standalone-chromium:latest
     container_name: browser-automation
-    restart: always
+    restart: unless-stopped
     ports:
       - "4444:4444"  # Selenium WebDriver
       - "7900:7900"  # VNC for debugging
@@ -144,7 +185,7 @@ services:
   code-executor:
     image: node:18-alpine
     container_name: code-executor
-    restart: always
+    restart: unless-stopped
     ports:
       - "3001:3001"
     volumes:
@@ -158,58 +199,11 @@ services:
     working_dir: /app
     command: >
       sh -c "
-        apk add --no-cache python3 py3-pip &&
-        pip3 install --break-system-packages requests beautifulsoup4 pandas numpy &&
+        apk add --no-cache python3 py3-pip curl &&
+        pip3 install --break-system-packages requests beautifulsoup4 pandas numpy matplotlib seaborn &&
         npm install &&
         node server.js
       "
-    networks:
-      - openwebui-network
-
-  # PostgreSQL Database (Optional - cho LiteLLM hoặc metadata)
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres
-    restart: always
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-openwebui}
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-    networks:
-      - openwebui-network
-
-  # Redis Cache & WebSocket
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    restart: always
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
-    volumes:
-      - redis-data:/data
-      - ./redis.conf:/etc/redis/redis.conf:ro
-    command: redis-server /etc/redis/redis.conf
-    networks:
-      - openwebui-network
-
-  # Nginx Load Balancer & Reverse Proxy
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx-ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - open-webui
     networks:
       - openwebui-network
 
@@ -217,7 +211,7 @@ services:
   mcp-server:
     image: python:3.11-slim
     container_name: mcp-server
-    restart: always
+    restart: unless-stopped
     ports:
       - "3003:3003"
     volumes:
@@ -231,17 +225,119 @@ services:
     working_dir: /app
     command: >
       sh -c "
-        pip install fastapi uvicorn github3.py docker &&
+        pip install --break-system-packages fastapi uvicorn github3.py docker requests &&
         python mcp_server.py
       "
     networks:
       - openwebui-network
 
-  # Multi-Agent Orchestrator (từ Openwwebui) - ĐÃ TẮT
+  # PostgreSQL Database (Optional)
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-openwebui}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+    networks:
+      - openwebui-network
+    profiles:
+      - production
+
+  # Redis Cache & WebSocket
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - openwebui-network
+
+  # ChromaDB Vector Database (Optional)
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_SERVER_AUTHN_CREDENTIALS=admin:admin
+      - CHROMA_SERVER_AUTHN_PROVIDER=chromadb.auth.basic.BasicAuthenticationServerProvider
+    volumes:
+      - chromadb-data:/chroma/chroma
+    networks:
+      - openwebui-network
+    profiles:
+      - production
+
+  # Ollama (Local AI Models)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: 4.0
+    networks:
+      - openwebui-network
+    profiles:
+      - local-models
+
+  # Nginx Load Balancer & Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - open-webui
+    networks:
+      - openwebui-network
+    profiles:
+      - production
+
+  # Ngrok Tunnel (For remote access)
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: unless-stopped
+    environment:
+      - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
+      - NGROK_REGION=${NGROK_REGION:-us}
+    command: ["http", "open-webui:8080", "--domain=${NGROK_DOMAIN:-your-domain.ngrok.io}"]
+    depends_on:
+      - open-webui
+    networks:
+      - openwebui-network
+    profiles:
+      - remote-access
+
+  # Multi-Agent Orchestrator (Optional - tạm thời tắt)
   # orchestrator:
   #   image: python:3.11-slim
   #   container_name: orchestrator
-  #   restart: always
+  #   restart: unless-stopped
   #   ports:
   #     - "8000:8000"
   #   volumes:
@@ -260,7 +356,7 @@ services:
   #   working_dir: /app/src
   #   command: >
   #     sh -c "
-  #       pip install fastapi uvicorn &&
+  #       pip install --break-system-packages fastapi uvicorn &&
   #       python main.py
   #     "
   #   networks:
@@ -274,13 +370,17 @@ services:
   #     retries: 3
 
 volumes:
-  litellm_logs:
+  openwebui-data:
     driver: local
-  litellm_cache:
+  openwebui-cache:
     driver: local
   postgres-data:
     driver: local
   redis-data:
+    driver: local
+  chromadb-data:
+    driver: local
+  ollama-data:
     driver: local
   jupyter-notebooks:
     driver: local
@@ -302,4 +402,6 @@ volumes:
 networks:
   openwebui-network:
     driver: bridge
-
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
