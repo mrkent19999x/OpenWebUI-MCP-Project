@@ -1,0 +1,68 @@
+CHECKLIST API KEYS - LINK TRỰC TIẾP:
+
+1. GROQ (Free - Rất nhanh)
+   https://console.groq.com/keys
+
+2. OPENROUTER (Free $5 credit - Nhiều models)
+   https://openrouter.ai/keys
+
+3. MINIMAX (Free tier - Tối ưu tiếng Việt)
+   https://platform.minimax.chat/
+
+4. DEEPSEEK (Free)
+   https://platform.deepseek.com/
+
+5. TOGETHER AI (Free $25 credit)
+   https://api.together.xyz/
+
+6. PERPLEXITY (Free tier)
+   https://www.perplexity.ai/settings/api
+
+7. COHERE (Free tier)
+   https://dashboard.cohere.com/api-keys
+
+8. REPLICATE (Free tier)
+   https://replicate.com/account/api-tokens
+
+9. HUGGINGFACE (Free)
+   https://huggingface.co/settings/tokens
+
+10. ANTHROPIC CLAUDE (Có free tier)
+    https://console.anthropic.com/settings/keys
+
+11. OPENAI (Có free tier)
+    https://platform.openai.com/api-keys
+
+12. GOOGLE GEMINI (Free tier)
+    https://aistudio.google.com/app/apikey
+
+13. QWEN (Qua OpenRouter hoặc Together)
+    https://openrouter.ai/models (tìm Qwen)
+
+14. MISTRAL (Free qua OpenRouter)
+    https://openrouter.ai/models (tìm Mistral)
+
+15. LLAMA (Free qua Groq/OpenRouter)
+    https://console.groq.com/keys
+
+16. MIXTRAL (Free qua Groq)
+    https://console.groq.com/keys
+
+17. GEMMA (Free qua Groq)
+    https://console.groq.com/keys
+
+18. DEEPSEEK (Free)
+    https://platform.deepseek.com/
+
+19. YI (Qua OpenRouter)
+    https://openrouter.ai/models
+
+20. PHI (Qua OpenRouter)
+    https://openrouter.ai/models
+
+CÁCH DÙNG:
+1. Click vào link
+2. Login/Đăng ký
+3. Tạo API key
+4. Copy key
+5. Vào Open WebUI → Admin Settings → Connections → Add Connection

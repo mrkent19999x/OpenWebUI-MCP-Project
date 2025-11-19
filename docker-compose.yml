@@ -150,7 +150,7 @@ services:
     volumes:
       - code-workspace:/workspace
       - code-outputs:/outputs
-      - ./code-executor:/app:ro
+      - ./code-executor:/app
     environment:
       - NODE_ENV=production
       - WORKSPACE_PATH=/workspace

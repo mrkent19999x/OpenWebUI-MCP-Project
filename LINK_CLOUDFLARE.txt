@@ -1,0 +1,11 @@
+🌐 LINK CLOUDFLARE TUNNEL (CỐ ĐỊNH):
+
+https://circulation-robertson-bass-lesson.trycloudflare.com
+
+📱 Dùng được trên mobile, không cần cùng mạng LAN
+✅ Tự động khởi động khi boot
+✅ Chạy 24/7
+
+Cách kiểm tra:
+- Mở link trên mobile/PC khác
+- Login: begau1302@gmail.com / Baoan2022@

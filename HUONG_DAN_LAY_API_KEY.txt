@@ -1,0 +1,16 @@
+✅ DIALOG ĐÃ MỞ - EM ĐÃ ĐIỀN URL GROQ RỒI!
+
+BÂY GIỜ ANH CẦN:
+1. Em đã mở tab Groq Console (https://console.groq.com/keys)
+2. Anh login vào Groq
+3. Tạo API Key mới (nếu chưa có)
+4. Anh đọc API key cho em (hoặc type vào đây)
+5. Em sẽ điền vào form và Save
+
+CÁCH ĐỌC API KEY KHÔNG CẦN CHUỘT:
+- Dùng Tab key để di chuyển
+- Shift+Arrow để bôi đen text
+- Ctrl+C để copy (nếu có thể)
+- Hoặc đơn giản: Anh đọc từng ký tự cho em
+
+API KEY GROQ thường bắt đầu bằng: gsk_...

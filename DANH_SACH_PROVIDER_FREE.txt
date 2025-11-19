@@ -1,0 +1,33 @@
+CÁC PROVIDER FREE ĐỂ LẤY API KEYS:
+
+1. GROQ (Free - Rất tốt)
+   - Link: https://console.groq.com/keys
+   - Đăng ký: Free, không cần thẻ
+   - Models: Llama, Mixtral, Gemma (rất nhanh)
+
+2. OPENROUTER (Free tier)
+   - Link: https://openrouter.ai/keys
+   - Đăng ký: Free, có $5 credit
+   - Models: Nhiều models free (Qwen, Llama, v.v.)
+
+3. MINIMAX
+   - Link: https://platform.minimax.chat/
+   - Đăng ký: Có free tier
+   - Models: abab5.5, abab6.5 (tối ưu tiếng Việt)
+
+4. DEEPSEEK (Free)
+   - Link: https://platform.deepseek.com/
+   - Đăng ký: Free
+   - Models: DeepSeek Chat
+
+5. TOGETHER AI (Free tier)
+   - Link: https://api.together.xyz/
+   - Đăng ký: Free $25 credit
+   - Models: Llama, Qwen, v.v.
+
+CÁCH LẤY API KEYS:
+1. Vào link trên
+2. Đăng ký/Login
+3. Tạo API key
+4. Copy key
+5. Paste vào Open WebUI

@@ -1,0 +1,17 @@
+HƯỚNG DẪN LẤY API KEY KHÔNG CẦN CHUỘT:
+
+CÁCH 1: DÙNG KEYBOARD
+1. Tab: Alt+1, Alt+2, Alt+3... để chuyển tab
+2. Tab key: Di chuyển giữa các ô
+3. Enter: Click button
+4. Ctrl+C: Copy (sau khi bôi đen bằng Shift+Arrow)
+5. Ctrl+V: Paste
+
+CÁCH 2: ANH NÓI CHO EM
+- Anh đọc API key cho em
+- Hoặc anh type vào đây
+- Em sẽ config luôn
+
+CÁCH 3: EM TẠO SCRIPT
+- Anh paste keys vào terminal
+- Em tự động config
