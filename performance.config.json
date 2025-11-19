@@ -1,0 +1,107 @@
+{
+  "performance": {
+    "description": "Configuration to achieve MiniMax-like performance in OpenWebUI",
+    "version": "1.0",
+    "optimized_for": "multi-agent, high-throughput, low-latency"
+  },
+  "multi_agent": {
+    "enabled": true,
+    "architecture": "load_balanced",
+    "instances": 3,
+    "load_balancing": {
+      "method": "least_connections",
+      "health_check_interval": 10,
+      "fail_timeout": 30
+    },
+    "worker_threads": {
+      "main": 100,
+      "async": 10,
+      "background": 5
+    }
+  },
+  "caching": {
+    "enabled": true,
+    "strategies": {
+      "response_cache": {
+        "enabled": true,
+        "ttl": 3600,
+        "max_size": "1GB"
+      },
+      "context_cache": {
+        "enabled": true,
+        "ttl": 7200,
+        "max_size": "512MB"
+      },
+      "file_operations_cache": {
+        "enabled": true,
+        "ttl": 1800,
+        "max_size": "256MB"
+      },
+      "model_cache": {
+        "enabled": true,
+        "ttl": 3600,
+        "max_size": "2GB"
+      }
+    },
+    "redis": {
+      "enabled": true,
+      "max_memory": "2GB",
+      "eviction_policy": "allkeys-lru"
+    }
+  },
+  "async_processing": {
+    "enabled": true,
+    "workers": {
+      "file_operations": 5,
+      "code_execution": 3,
+      "response_generation": 10
+    },
+    "queue": {
+      "max_size": 1000,
+      "timeout": 300
+    }
+  },
+  "streaming": {
+    "enabled": true,
+    "chunk_size": 10,
+    "progressive_rendering": true,
+    "buffer_size": 32
+  },
+  "resource_management": {
+    "connection_pooling": {
+      "enabled": true,
+      "size": 50,
+      "max_overflow": 20
+    },
+    "memory": {
+      "optimization": true,
+      "cache_size": "512MB",
+      "pooling": true
+    },
+    "concurrency": {
+      "max_requests": 100,
+      "max_per_user": 10
+    }
+  },
+  "timeouts": {
+    "http_client": 600,
+    "model_list": 30,
+    "request": 300,
+    "websocket": 300
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": [
+      "latency",
+      "throughput",
+      "cache_hit_rate",
+      "error_rate",
+      "resource_usage"
+    ],
+    "alert_thresholds": {
+      "latency_ms": 1000,
+      "error_rate_percent": 1,
+      "memory_usage_percent": 90
+    }
+  }
+}

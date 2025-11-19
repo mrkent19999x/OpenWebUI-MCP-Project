@@ -1,0 +1,18 @@
+model_list:
+  - model_name: gpt-4
+    litellm_params:
+      model: gpt-4
+      api_key: os.environ/OPENAI_API_KEY
+  - model_name: claude-3-opus
+    litellm_params:
+      model: claude-3-opus-20240229
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: gemini-pro
+    litellm_params:
+      model: gemini/gemini-pro
+      api_key: os.environ/GOOGLE_API_KEY
+
+general_settings:
+  master_key: sk-litellm-1234567890abcdef
+  database_url: postgresql://postgres:password@postgres:5432/litellm
+  redis_url: redis://redis:6379/0

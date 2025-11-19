@@ -1,0 +1,35 @@
+🔑 HƯỚNG DẪN NHANH - LẤY API KEYS
+
+1. MINIMAX (Quan trọng nhất):
+   - Vào: https://www.minimax.chat/
+   - Đăng ký/Đăng nhập
+   - Vào Dashboard → API Keys
+   - Copy key → Thêm vào .env: MINIMAX_API_KEY=sk-xxxxx...
+
+2. GOOGLE GEMINI (Free, tốt):
+   - Vào: https://aistudio.google.com/app/apikey
+   - Đăng nhập Google
+   - Click "Create API Key"
+   - Copy key → Thêm vào .env: GOOGLE_API_KEY=AIza...
+
+3. CLAUDE (Tùy chọn):
+   - Vào: https://console.anthropic.com/
+   - Đăng ký/Đăng nhập
+   - Settings → API Keys → Create Key
+   - Copy key → Thêm vào .env: ANTHROPIC_API_KEY=sk-ant-xxxxx...
+
+4. HUGGINGFACE (Free):
+   - Vào: https://huggingface.co/settings/tokens
+   - Đăng nhập → Settings → Access Tokens
+   - New token → Copy → Thêm vào .env: HUGGINGFACE_API_KEY=hf_xxxxx...
+
+5. GITHUB (Cho MCP):
+   - Vào: https://github.com/settings/tokens
+   - Personal access tokens → Generate new token
+   - Chọn: repo, workflow, read:org
+   - Copy → Thêm vào .env: GITHUB_TOKEN=ghp_xxxxx...
+
+SAU KHI LẤY XONG:
+1. Tạo file .env: nano /home/mrkent/openwebui-merged/.env
+2. Thêm các keys vào
+3. Chạy: cd /home/mrkent/openwebui-merged && docker-compose restart

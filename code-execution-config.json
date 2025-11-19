@@ -1,0 +1,148 @@
+{
+  "code_execution": {
+    "enabled": true,
+    "description": "Code execution và terminal operations với GUI display",
+    "sandbox": {
+      "enabled": true,
+      "timeout": 300,
+      "memory_limit": "512MB",
+      "cpu_limit": 1,
+      "network_enabled": false,
+      "file_system_readonly": false,
+      "allowed_directories": [
+        "/workspace",
+        "/tmp"
+      ]
+    },
+    "safety": {
+      "block_dangerous_commands": true,
+      "dangerous_commands": [
+        "rm -rf /",
+        "format",
+        "del /f",
+        "sudo rm",
+        "mkfs",
+        "dd if="
+      ],
+      "require_confirmation": [
+        "rm -rf",
+        "git push --force",
+        "docker rm -f"
+      ],
+      "max_execution_time": 300,
+      "auto_kill_on_timeout": true
+    },
+    "gui": {
+      "terminal_display": {
+        "enabled": true,
+        "theme": "dark",
+        "show_timestamps": true,
+        "show_command": true,
+        "show_output": true,
+        "show_errors": true,
+        "max_output_lines": 1000,
+        "auto_scroll": true,
+        "color_output": true
+      },
+      "file_operations_display": {
+        "enabled": true,
+        "show_file_tree": true,
+        "show_file_preview": true,
+        "show_creation_time": true,
+        "show_file_size": true,
+        "auto_refresh": true,
+        "notifications": {
+          "file_created": true,
+          "file_modified": true,
+          "file_deleted": true,
+          "folder_created": true
+        }
+      },
+      "project_operations": {
+        "enabled": true,
+        "show_project_structure": true,
+        "show_file_count": true,
+        "show_total_size": true,
+        "visual_tree": true
+      }
+    },
+    "error_handling": {
+      "catch_errors": true,
+      "show_error_details": true,
+      "suggest_fixes": true,
+      "log_errors": true,
+      "continue_on_error": false,
+      "max_retries": 0
+    },
+    "performance": {
+      "stream_output": true,
+      "chunk_size": 1024,
+      "buffer_size": 8192,
+      "non_blocking": true
+    }
+  },
+  "file_operations": {
+    "enabled": true,
+    "auto_create_directories": true,
+    "max_file_size": "10MB",
+    "allowed_extensions": [
+      ".py", ".js", ".ts", ".json", ".md", ".txt",
+      ".yml", ".yaml", ".html", ".css", ".scss",
+      ".vue", ".jsx", ".tsx", ".go", ".rs", ".java"
+    ],
+    "gui": {
+      "file_tree": {
+        "enabled": true,
+        "show_hidden": false,
+        "icons": true,
+        "expand_on_create": true,
+        "highlight_new": true
+      },
+      "editor": {
+        "enabled": true,
+        "syntax_highlighting": true,
+        "line_numbers": true,
+        "auto_complete": true,
+        "auto_save": false,
+        "show_preview": true
+      },
+      "notifications": {
+        "enabled": true,
+        "show_toast": true,
+        "show_in_sidebar": true,
+        "auto_hide_seconds": 5
+      }
+    }
+  },
+  "prompt_classification": {
+    "enabled": true,
+    "auto_detect": true,
+    "categories": {
+      "code_execution": {
+        "keywords": ["run", "execute", "terminal", "command", "bash", "python", "node", "script"],
+        "icon": "💻",
+        "color": "#10b981"
+      },
+      "file_operations": {
+        "keywords": ["create", "file", "folder", "directory", "write", "read", "delete", "edit", "tạo"],
+        "icon": "📁",
+        "color": "#3b82f6"
+      },
+      "project_creation": {
+        "keywords": ["project", "init", "setup", "create project", "new project", "tạo project"],
+        "icon": "🚀",
+        "color": "#8b5cf6"
+      },
+      "general_chat": {
+        "keywords": ["chat", "talk", "conversation", "ask", "question", "hỏi"],
+        "icon": "💬",
+        "color": "#6366f1"
+      },
+      "search": {
+        "keywords": ["search", "find", "tìm", "lookup", "google"],
+        "icon": "🔍",
+        "color": "#f59e0b"
+      }
+    }
+  }
+}

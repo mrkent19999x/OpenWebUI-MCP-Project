@@ -1,0 +1,146 @@
+{
+  "workspace": {
+    "name": "Enhanced OpenWebUI Workspace",
+    "version": "1.0",
+    "description": "Configuration for Manus AI-like enhanced GUI"
+  },
+  "layout": {
+    "type": "multi-panel",
+    "panels": {
+      "left": {
+        "type": "file-tree",
+        "width": 250,
+        "collapsible": true,
+        "default_collapsed": false
+      },
+      "center": {
+        "type": "main-content",
+        "flexible": true,
+        "tabs": {
+          "enabled": true,
+          "max_tabs": 10
+        }
+      },
+      "right": {
+        "type": "quick-actions",
+        "width": 300,
+        "collapsible": true,
+        "default_collapsed": false
+      }
+    }
+  },
+  "features": {
+    "file_tree": {
+      "enabled": true,
+      "show_hidden": false,
+      "icons": true,
+      "context_menu": true,
+      "drag_drop": true
+    },
+    "code_editor": {
+      "enabled": true,
+      "syntax_highlighting": true,
+      "line_numbers": true,
+      "auto_complete": true,
+      "themes": [
+        "dark",
+        "light",
+        "monokai",
+        "dracula"
+      ]
+    },
+    "quick_actions": {
+      "enabled": true,
+      "command_palette": {
+        "enabled": true,
+        "shortcut": "Ctrl+K",
+        "fuzzy_search": true
+      },
+      "shortcuts": {
+        "new_file": "Ctrl+N",
+        "new_folder": "Ctrl+Shift+N",
+        "save": "Ctrl+S",
+        "save_all": "Ctrl+K S",
+        "find": "Ctrl+F",
+        "replace": "Ctrl+H",
+        "command_palette": "Ctrl+K"
+      }
+    },
+    "multi_agent": {
+      "enabled": true,
+      "agent_panel": {
+        "enabled": true,
+        "show_status": true,
+        "show_tasks": true,
+        "show_performance": true
+      },
+      "visualization": {
+        "enabled": true,
+        "show_workflow": true,
+        "show_timeline": true
+      }
+    },
+    "project_templates": {
+      "enabled": true,
+      "templates": [
+        {
+          "name": "React Project",
+          "description": "Create a new React project",
+          "files": [
+            "package.json",
+            "src/App.jsx",
+            "src/index.jsx"
+          ]
+        },
+        {
+          "name": "Python Project",
+          "description": "Create a new Python project",
+          "files": [
+            "requirements.txt",
+            "main.py",
+            "README.md"
+          ]
+        },
+        {
+          "name": "Node.js Project",
+          "description": "Create a new Node.js project",
+          "files": [
+            "package.json",
+            "index.js",
+            ".gitignore"
+          ]
+        }
+      ]
+    },
+    "drag_drop": {
+      "enabled": true,
+      "file_upload": true,
+      "file_reorder": true,
+      "folder_creation": true
+    },
+    "real_time": {
+      "enabled": true,
+      "collaboration": false,
+      "live_preview": true,
+      "auto_save": true
+    }
+  },
+  "theming": {
+    "default_theme": "dark",
+    "custom_themes": {
+      "enabled": true,
+      "css_file": "custom-theme.css"
+    },
+    "accent_colors": {
+      "primary": "#6366f1",
+      "secondary": "#8b5cf6",
+      "accent": "#ec4899"
+    }
+  },
+  "performance": {
+    "lazy_loading": true,
+    "virtual_scrolling": true,
+    "debounce_search": 300,
+    "cache_previews": true
+  }
+}

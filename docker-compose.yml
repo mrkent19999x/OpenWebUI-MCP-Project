@@ -1,0 +1,697 @@
+version: '3.8'
+
+services:
+  # OpenWebUI Service - MERGED: OpenWebUI-MCP-Project + Openwwebui (MiniMax)
+  # Config hiện tại của anh: OLLAMA_BASE_URL, WEBUI_URL, WEBUI_NAME
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    ports:
+      - "7860:8080"  # Port hiện tại của anh
+    volumes:
+      # Mount ổ 500GB của anh (giữ nguyên data)
+      - /home/mrkent/openwebui-storage/openwebui-data:/app/backend/data
+      # Enhanced GUI Files (Manus AI-like)
+      - ./custom-theme.css:/app/frontend/public/custom-theme.css:ro
+      - ./hide-terminal-theme.css:/app/frontend/public/hide-terminal-theme.css:ro
+      - ./workspace-config.json:/app/backend/data/workspace-config.json:ro
+      - ./quick-actions.json:/app/backend/data/quick-actions.json:ro
+      - ./code-preview-component.js:/app/frontend/public/code-preview-component.js:ro
+      - ./ui-optimization-config.json:/app/backend/data/ui-optimization-config.json:ro
+      - ./prompt-templates.json:/app/backend/data/prompt-templates.json:ro
+      - ./system-prompts.json:/app/backend/data/system-prompts.json:ro
+    environment:
+      # ============================================
+      # APPLICATION SETTINGS - CONFIG HIỆN TẠI CỦA ANH
+      # ============================================
+      - WEBUI_URL=http://192.168.1.176:7860  # Config hiện tại
+      - WEBUI_NAME=Open WebUI - 24/7  # Config hiện tại
+      - PORT=8080
+      - ENV=prod
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DEBUG=False
+      
+      # ============================================
+      # AUTHENTICATION & SECURITY
+      # ============================================
+      - WEBUI_AUTH=False  # Config hiện tại - Tắt authentication
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
+      - WEBUI_JWT_SECRET_KEY=${WEBUI_JWT_SECRET_KEY:-${WEBUI_SECRET_KEY:-}}
+      - JWT_EXPIRES_IN=4w
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-${WEBUI_SECRET_KEY:-}}
+      - ENABLE_SIGNUP=True
+      - ENABLE_PERSISTENT_CONFIG=True
+      - DEFAULT_USER_ROLE=pending
+      - WEBUI_AUTH_TRUST_HOST=False
+      - WEBUI_AUTH_TRUST_PROXY=False
+      - WEBUI_SESSION_COOKIE_SECURE=False
+      - WEBUI_SESSION_COOKIE_HTTPONLY=True
+      - WEBUI_SESSION_COOKIE_SAMESITE=lax
+      - WEBUI_AUTH_COOKIE_SAMESITE=lax
+      - ENABLE_LOGIN_FORM=True
+      - ENABLE_OAUTH=False
+      - ENABLE_OAUTH_WITHOUT_EMAIL=False
+      - OAUTH_GROUPS_SEPARATOR=;
+      - OAUTH_ROLES_SEPARATOR=,
+      - ENABLE_LDAP=False
+      - LDAP_SERVER=${LDAP_SERVER:-}
+      - LDAP_BIND_DN=${LDAP_BIND_DN:-}
+      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-}
+      - LDAP_BASE_DN=${LDAP_BASE_DN:-}
+      - LDAP_USER_FILTER=${LDAP_USER_FILTER:-}
+      
+      # ============================================
+      # LANGUAGE & LOCALIZATION
+      # ============================================
+      - DEFAULT_LOCALE=vi
+      - ENABLE_I18N=True
+      
+      # ============================================
+      # SESSION & COOKIE MANAGEMENT
+      # ============================================
+      - WEBUI_SESSION_COOKIE_SAME_SITE=lax
+      - WEBUI_AUTH_COOKIE_SAME_SITE=lax
+      - SESSION_EXPIRY_HOURS=168  # 7 days
+      
+      # ============================================
+      # CORS CONFIGURATION
+      # ============================================
+      - CORS_ALLOW_ORIGIN=*
+      - CORS_ALLOW_CREDENTIALS=True
+      - CORS_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
+      - CORS_ALLOW_HEADERS=*
+      
+      # ============================================
+      # OLLAMA CONFIGURATION - CONFIG HIỆN TẠI CỦA ANH
+      # ============================================
+      - ENABLE_OLLAMA_API=True  # Config hiện tại
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434  # Config hiện tại (external Ollama)
+      - USE_OLLAMA_DOCKER=false  # Config hiện tại
+      - OLLAMA_API_VERIFY_SSL=True
+      - OLLAMA_KEEP_ALIVE=5m
+      - OLLAMA_NUM_CTX=4096
+      - OLLAMA_NUM_PREDICT=-1
+      - OLLAMA_TEMPERATURE=0.7
+      - OLLAMA_TOP_K=40
+      - OLLAMA_TOP_P=0.9
+      - OLLAMA_REPEAT_PENALTY=1.1
+      
+      # ============================================
+      # LITELLM INTEGRATION (100+ AI MODELS) - TẠM TẮT, DÙNG TRỰC TIẾP API KEYS
+      # ============================================
+      - ENABLE_OPENAI_API=True
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-https://api.openai.com/v1}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_API_VERIFY_SSL=True
+      - OPENAI_API_TIMEOUT=600
+      
+      # ============================================
+      # MINIMAX CONFIGURATION (từ Openwwebui)
+      # ============================================
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY:-}
+      - MINIMAX_API_BASE_URL=${MINIMAX_API_BASE_URL:-https://api.minimax.chat/v1}
+      - ENABLE_MINIMAX=${ENABLE_MINIMAX:-True}
+      - MINIMAX_SANDBOX_ENABLED=${MINIMAX_SANDBOX_ENABLED:-False}
+      - MINIMAX_SANDBOX_API_URL=${MINIMAX_SANDBOX_API_URL:-https://api.minimax.chat/v1/sandbox}
+      
+      # ============================================
+      # ANTHROPIC (CLAUDE) VIA LITELLM
+      # ============================================
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ENABLE_ANTHROPIC=${ENABLE_ANTHROPIC:-True}
+      - ANTHROPIC_API_BASE_URL=${ANTHROPIC_API_BASE_URL:-https://api.anthropic.com}
+      - ANTHROPIC_MAX_TOKENS=4096
+      
+      # ============================================
+      # GOOGLE AI VIA LITELLM
+      # ============================================
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - GOOGLE_API_BASE_URL=${GOOGLE_API_BASE_URL:-https://generativelanguage.googleapis.com/v1beta}
+      - ENABLE_GOOGLE=${ENABLE_GOOGLE:-True}
+      
+      # ============================================
+      # HUGGINGFACE VIA LITELLM
+      # ============================================
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY:-}
+      - HUGGINGFACE_API_BASE_URL=${HUGGINGFACE_API_BASE_URL:-https://api-inference.huggingface.co}
+      - ENABLE_HUGGINGFACE=${ENABLE_HUGGINGFACE:-True}
+      
+      # ============================================
+      # ADDITIONAL AI PROVIDERS
+      # ============================================
+      - COHERE_API_KEY=${COHERE_API_KEY:-}
+      - ENABLE_COHERE=${ENABLE_COHERE:-False}
+      - COHERE_API_BASE_URL=${COHERE_API_BASE_URL:-https://api.cohere.ai}
+      
+      - REPLICATE_API_KEY=${REPLICATE_API_KEY:-}
+      - ENABLE_REPLICATE=${ENABLE_REPLICATE:-False}
+      - REPLICATE_API_BASE_URL=${REPLICATE_API_BASE_URL:-https://api.replicate.com}
+      
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY:-}
+      - ENABLE_PERPLEXITY=${ENABLE_PERPLEXITY:-False}
+      - PERPLEXITY_API_BASE_URL=${PERPLEXITY_API_BASE_URL:-https://api.perplexity.ai}
+      
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - ENABLE_GROQ=${ENABLE_GROQ:-False}
+      - GROQ_API_BASE_URL=${GROQ_API_BASE_URL:-https://api.groq.com/openai/v1}
+      
+      - TOGETHER_API_KEY=${TOGETHER_API_KEY:-}
+      - ENABLE_TOGETHER=${ENABLE_TOGETHER:-False}
+      - TOGETHER_API_BASE_URL=${TOGETHER_API_BASE_URL:-https://api.together.xyz/v1}
+      
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - ENABLE_DEEPSEEK=${ENABLE_DEEPSEEK:-False}
+      - DEEPSEEK_API_BASE_URL=${DEEPSEEK_API_BASE_URL:-https://api.deepseek.com/v1}
+      
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - ENABLE_OPENROUTER=${ENABLE_OPENROUTER:-False}
+      - OPENROUTER_API_BASE_URL=${OPENROUTER_API_BASE_URL:-https://openrouter.ai/api/v1}
+      
+      # ============================================
+      # MCP (MODEL CONTEXT PROTOCOL) CONFIGURATION
+      # ============================================
+      - ENABLE_DIRECT_CONNECTIONS=True
+      - TOOL_SERVER_CONNECTIONS=${TOOL_SERVER_CONNECTIONS:-}
+      - MCP_SERVER_URL=${MCP_SERVER_URL:-http://mcp-server:3003}
+      - ENABLE_MCP_TOOLS=True
+      
+      # ============================================
+      # DATABASE CONFIGURATION
+      # ============================================
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///data/webui.db}
+      - DATABASE_POOL_SIZE=10
+      - DATABASE_MAX_OVERFLOW=20
+      - DATABASE_POOL_TIMEOUT=30
+      - DATABASE_POOL_RECYCLE=3600
+      
+      # ============================================
+      # FILE UPLOAD & STORAGE
+      # ============================================
+      - ENABLE_FILE_UPLOAD=True
+      - MAX_FILE_SIZE=100MB
+      - ALLOWED_FILE_EXTENSIONS=.pdf,.txt,.doc,.docx,.xls,.xlsx,.csv,.json,.md,.py,.js,.ts,.html,.css,.jpg,.jpeg,.png,.gif,.webp,.svg
+      - UPLOAD_DIR=/app/backend/data/uploads
+      - ENABLE_FILE_PREVIEW=True
+      - ENABLE_FILE_DOWNLOAD=True
+      - ENABLE_FILE_DELETE=True
+      
+      # ============================================
+      # IMAGE UPLOAD & VISION
+      # ============================================
+      - ENABLE_IMAGE_UPLOAD=True
+      - MAX_IMAGE_SIZE=10MB
+      - ALLOWED_IMAGE_FORMATS=jpg,jpeg,png,gif,webp,svg
+      - ENABLE_VISION_MODELS=True
+      - ENABLE_IMAGE_GENERATION=False
+      
+      # ============================================
+      # KNOWLEDGE BASE & RAG
+      # ============================================
+      - ENABLE_KNOWLEDGE_BASE=True
+      - ENABLE_RAG=True
+      - ENABLE_RAG_WEB_SEARCH=True
+      - ENABLE_WEB_LOADER_SSL_VERIFICATION=True
+      - RAG_TOP_K=5
+      - RAG_SIMILARITY_THRESHOLD=0.7
+      - RAG_CHUNK_SIZE=1000
+      - RAG_CHUNK_OVERLAP=200
+      - ENABLE_RAG_HYBRID_SEARCH=True
+      - ENABLE_RAG_RE_RANKING=False
+      
+      # ============================================
+      # VECTOR DATABASE
+      # ============================================
+      - VECTOR_DB=chroma
+      - CHROMA_TENANT=default_tenant
+      - CHROMA_DATABASE=default_database
+      - CHROMA_COLLECTION_NAME=openwebui_collection
+      - CHROMA_HOST=${CHROMA_HOST:-}
+      - CHROMA_PORT=${CHROMA_PORT:-8000}
+      - ENABLE_VECTOR_STORE=True
+      - VECTOR_STORE_EMBEDDING_MODEL=all-MiniLM-L6-v2
+      
+      # ============================================
+      # AGENTS & TOOLS
+      # ============================================
+      - ENABLE_AGENTS=True
+      - ENABLE_AGENT_AUTO_START=False
+      - ENABLE_AGENT_MULTI_STEP=True
+      - ENABLE_AGENT_MEMORY=True
+      - AGENT_MAX_ITERATIONS=10
+      - AGENT_TIMEOUT=300
+      - ENABLE_TOOLS=True
+      - ENABLE_CODE_INTERPRETER=True
+      - ENABLE_WEB_BROWSER=True
+      - ENABLE_WEB_SEARCH=True
+      - ENABLE_FILE_OPERATIONS=True
+      - ENABLE_GITHUB_INTEGRATION=False
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      
+      # ============================================
+      # CODE EXECUTION
+      # ============================================
+      - ENABLE_CODE_EXECUTION=True
+      - CODE_EXECUTION_TIMEOUT=300
+      - CODE_EXECUTION_MEMORY_LIMIT=512MB
+      - CODE_EXECUTION_CPU_LIMIT=1
+      - CODE_EXECUTOR_URL=${CODE_EXECUTOR_URL:-http://code-executor:3001}
+      - JUPYTER_URL=${JUPYTER_URL:-http://jupyter:8888}
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-manus-code-sandbox-2024}
+      - ENABLE_CODE_SANDBOX=True
+      - CODE_SANDBOX_NETWORK_ENABLED=False
+      - CODE_SANDBOX_ALLOWED_DIRECTORIES=/workspace,/tmp
+      
+      # ============================================
+      # PERFORMANCE SETTINGS - OPTIMIZED
+      # ============================================
+      - ENABLE_REALTIME_CHAT_SAVE=False
+      - CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE=10
+      - THREAD_POOL_SIZE=100
+      - MODELS_CACHE_TTL=3600
+      - ENABLE_MODEL_CACHE=True
+      
+      # ============================================
+      # ADVANCED CACHING
+      # ============================================
+      - ENABLE_RESPONSE_CACHE=True
+      - RESPONSE_CACHE_TTL=3600
+      - RESPONSE_CACHE_MAX_SIZE=1GB
+      - ENABLE_CONTEXT_CACHE=True
+      - CONTEXT_CACHE_TTL=7200
+      - CONTEXT_CACHE_MAX_SIZE=512MB
+      - ENABLE_FILE_OPERATIONS_CACHE=True
+      - FILE_OPERATIONS_CACHE_TTL=1800
+      - FILE_OPERATIONS_CACHE_MAX_SIZE=256MB
+      
+      # ============================================
+      # ASYNC PROCESSING (MULTI-AGENT LIKE)
+      # ============================================
+      - ENABLE_ASYNC_PROCESSING=True
+      - ASYNC_WORKER_THREADS=10
+      - ENABLE_BACKGROUND_TASKS=True
+      - MAX_CONCURRENT_REQUESTS=100
+      - MAX_CONCURRENT_REQUESTS_PER_USER=10
+      
+      # ============================================
+      # STREAMING OPTIMIZATION
+      # ============================================
+      - ENABLE_STREAMING=True
+      - STREAMING_CHUNK_SIZE=10
+      - ENABLE_PROGRESSIVE_RENDERING=True
+      - STREAMING_BUFFER_SIZE=32
+      - ENABLE_STREAMING_SSE=True
+      
+      # ============================================
+      # TIMEOUT SETTINGS
+      # ============================================
+      - AIOHTTP_CLIENT_TIMEOUT=600
+      - AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST=30
+      - REQUEST_TIMEOUT=300
+      - WEBSOCKET_TIMEOUT=300
+      - MODEL_LIST_TIMEOUT=30
+      
+      # ============================================
+      # WEBSOCKET & REDIS
+      # ============================================
+      - ENABLE_WEBSOCKET_SUPPORT=True
+      - REDIS_URL=redis://redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - REDIS_DB=0
+      - REDIS_SOCKET_TIMEOUT=5
+      - REDIS_SOCKET_CONNECT_TIMEOUT=5
+      
+      # ============================================
+      # CONNECTION POOLING
+      # ============================================
+      - ENABLE_CONNECTION_POOLING=True
+      - CONNECTION_POOL_SIZE=50
+      - CONNECTION_POOL_MAX_OVERFLOW=20
+      - CONNECTION_POOL_TIMEOUT=30
+      - CONNECTION_POOL_RECYCLE=3600
+      
+      # ============================================
+      # MEMORY OPTIMIZATION
+      # ============================================
+      - ENABLE_MEMORY_OPTIMIZATION=True
+      - MEMORY_CACHE_SIZE=512MB
+      - ENABLE_MEMORY_POOLING=True
+      - MEMORY_POOL_SIZE=256MB
+      
+      # ============================================
+      # FEATURES
+      # ============================================
+      - ENABLE_TITLE_GENERATION=True
+      - ENABLE_FOLLOW_UP_GENERATION=True
+      - ENABLE_MESSAGE_RATING=True
+      - ENABLE_COMMUNITY_SHARING=True
+      - ENABLE_CHAT_EXPORT=True
+      - ENABLE_CHAT_IMPORT=True
+      - ENABLE_CHAT_HISTORY=True
+      - ENABLE_CHAT_SEARCH=True
+      - ENABLE_CHAT_FOLDERS=True
+      - ENABLE_CHAT_TAGS=True
+      - ENABLE_PROMPT_TEMPLATES=True
+      - ENABLE_PROMPT_SUGGESTIONS=True
+      - ENABLE_AUTO_SAVE=True
+      - ENABLE_DARK_MODE=True
+      - ENABLE_LIGHT_MODE=True
+      - ENABLE_CUSTOM_THEMES=True
+      
+      # ============================================
+      # ADMIN SETTINGS
+      # ============================================
+      - ENABLE_ADMIN_EXPORT=True
+      - ENABLE_ADMIN_CHAT_ACCESS=True
+      - ENABLE_ADMIN_USER_MANAGEMENT=True
+      - ENABLE_ADMIN_MODEL_MANAGEMENT=True
+      - ENABLE_ADMIN_CONFIG_MANAGEMENT=True
+      - SHOW_ADMIN_DETAILS=True
+      - ADMIN_USER_EMAIL=${ADMIN_USER_EMAIL:-}
+      - ADMIN_USER_PASSWORD=${ADMIN_USER_PASSWORD:-}
+      
+      # ============================================
+      # MONITORING & LOGGING
+      # ============================================
+      - ENABLE_METRICS=True
+      - ENABLE_ANALYTICS=False
+      - ENABLE_ERROR_TRACKING=True
+      - ENABLE_PERFORMANCE_MONITORING=True
+      - LOG_RETENTION_DAYS=30
+      - ENABLE_ACCESS_LOG=True
+      - ENABLE_ERROR_LOG=True
+      
+      # ============================================
+      # API SETTINGS
+      # ============================================
+      - ENABLE_API=True
+      - API_RATE_LIMIT=100
+      - API_RATE_LIMIT_WINDOW=60
+      - ENABLE_API_KEY_AUTH=False
+      - API_KEY_HEADER=X-API-Key
+      
+      # ============================================
+      # NOTIFICATION SETTINGS
+      # ============================================
+      - ENABLE_NOTIFICATIONS=True
+      - ENABLE_EMAIL_NOTIFICATIONS=False
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_FROM=${SMTP_FROM:-}
+      
+      # ============================================
+      # SECURITY SETTINGS
+      # ============================================
+      - ENABLE_RATE_LIMITING=True
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW=60
+      - ENABLE_IP_WHITELIST=False
+      - IP_WHITELIST=${IP_WHITELIST:-}
+      - ENABLE_IP_BLACKLIST=False
+      - IP_BLACKLIST=${IP_BLACKLIST:-}
+      - ENABLE_CONTENT_FILTER=True
+      - ENABLE_PROFANITY_FILTER=False
+      
+      # ============================================
+      # WEBHOOK CONFIGURATION
+      # ============================================
+      - ENABLE_WEBHOOKS=${ENABLE_WEBHOOKS:-False}
+      - WEBHOOK_URL=${WEBHOOK_URL:-}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET:-}
+      - WEBHOOK_EVENTS=${WEBHOOK_EVENTS:-message.created,file.uploaded,error.occurred}
+      - WEBHOOK_TIMEOUT=30
+      - WEBHOOK_RETRY_ATTEMPTS=3
+      - WEBHOOK_RETRY_DELAY=5
+      
+      # Discord Webhook (Nếu muốn nhận notifications trên Discord)
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL:-}
+      - ENABLE_DISCORD_NOTIFICATIONS=${ENABLE_DISCORD_NOTIFICATIONS:-False}
+      
+      # Slack Webhook (Nếu muốn nhận notifications trên Slack)
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+      - ENABLE_SLACK_NOTIFICATIONS=${ENABLE_SLACK_NOTIFICATIONS:-False}
+      
+      # Telegram Bot (Nếu muốn nhận notifications trên Telegram)
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+      - ENABLE_TELEGRAM_NOTIFICATIONS=${ENABLE_TELEGRAM_NOTIFICATIONS:-False}
+      
+      # ============================================
+      # EXPERIMENTAL FEATURES
+      # ============================================
+      - ENABLE_EXPERIMENTAL_FEATURES=False
+      - ENABLE_BETA_FEATURES=False
+      - ENABLE_ALPHA_FEATURES=False
+      
+    depends_on:
+      - redis
+      - jupyter
+      - browser-automation
+      - code-executor
+    networks:
+      - openwebui-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Để kết nối Ollama external
+
+  # LiteLLM Gateway Service (100+ AI Models) - TẠM TẮT, DÙNG TRỰC TIẾP API KEYS
+  # litellm-gateway:
+  #   image: ghcr.io/berriai/litellm:main
+  #   container_name: litellm-gateway
+  #   restart: always
+  #   ports:
+  #     - "${LITELLM_PORT:-4000}:4000"
+  #   volumes:
+  #     - ./litellm_config.yaml:/app/config.yaml:ro
+  #     - litellm_logs:/app/logs
+  #     - litellm_cache:/app/cache
+  #   environment:
+  #     - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-password}@postgres:5432/litellm
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-litellm-1234567890abcdef}
+  #     - LOG_LEVEL=${LITELLM_LOG_LEVEL:-INFO}
+  #     - MAX_BATCH_SIZE=10
+  #     - MAX_CONCURRENT_REQUESTS=100
+  #     - REQUESTS_PER_MINUTE=1000
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #   networks:
+  #     - openwebui-network
+
+  # Jupyter Lab - Code Execution Environment
+  jupyter:
+    image: jupyter/minimal-notebook:latest
+    container_name: jupyter-sandbox
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - jupyter-notebooks:/home/jovyan/work
+      - code-executions:/home/jovyan/executions
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-manus-code-sandbox-2024}
+      - CHOWN_HOME=yes
+      - CHOWN_HOME_OPTS=-R
+    networks:
+      - openwebui-network
+
+  # Browser Automation Service (Selenium + Playwright)
+  browser-automation:
+    image: seleniarm/standalone-chromium:latest
+    container_name: browser-automation
+    restart: always
+    ports:
+      - "4444:4444"  # Selenium WebDriver
+      - "7900:7900"  # VNC for debugging
+    volumes:
+      - browser-screenshots:/screenshots
+      - browser-data:/home/selenium/Downloads
+    environment:
+      - VNC_NO_PASSWORD=1
+      - VNC_PASSWORD=secret
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1080
+      - DISPLAY=:99
+    networks:
+      - openwebui-network
+
+  # Code Execution Service (Node.js + Python runtime) - Manus AI Equivalent
+  code-executor:
+    image: node:18-alpine
+    container_name: code-executor
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - code-workspace:/workspace
+      - code-outputs:/outputs
+    environment:
+      - NODE_ENV=production
+      - WORKSPACE_PATH=/workspace
+      - OUTPUT_PATH=/outputs
+    working_dir: /workspace
+    command: >
+      sh -c "
+        apk add --no-cache python3 py3-pip nodejs npm &&
+        npm install -g pm2 &&
+        pip3 install requests beautifulsoup4 pandas numpy &&
+        node server.js
+      "
+    networks:
+      - openwebui-network
+
+  # Deployment Service
+  deployment-service:
+    image: ghcr.io/vercel/vercel:latest
+    container_name: deployment-service
+    restart: always
+    ports:
+      - "3002:3002"
+    volumes:
+      - deployment-workspace:/deploy-workspace
+    environment:
+      - VERCEL_TOKEN=${VERCEL_TOKEN:-placeholder}
+      - DEPLOY_ENV=${DEPLOY_ENV:-development}
+    networks:
+      - openwebui-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: always
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - POSTGRES_DB=litellm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+    networks:
+      - openwebui-network
+
+  # Redis Cache & WebSocket
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/etc/redis/redis.conf:ro
+    command: redis-server /etc/redis/redis.conf
+    networks:
+      - openwebui-network
+
+  # Nginx Load Balancer & Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - open-webui
+    networks:
+      - openwebui-network
+
+  # MCP Tools Server (GitHub, Docker, etc.)
+  mcp-server:
+    image: python:3.11-slim
+    container_name: mcp-server
+    restart: always
+    ports:
+      - "3003:3003"
+    volumes:
+      - mcp-workspace:/workspace
+      - ./mcp-server:/app:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - MCP_SERVER_PORT=3003
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-placeholder}
+      - DOCKER_SOCKET=/var/run/docker.sock
+    working_dir: /app
+    command: >
+      sh -c "
+        pip install fastapi uvicorn github3.py docker &&
+        python mcp_server.py
+      "
+    networks:
+      - openwebui-network
+
+  # Multi-Agent Orchestrator (từ Openwwebui) - ĐÃ TẮT
+  # orchestrator:
+  #   image: python:3.11-slim
+  #   container_name: orchestrator
+  #   restart: always
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./orchestrator/src:/app/src:ro
+  #   environment:
+  #     - ORCHESTRATOR_PORT=8000
+  #     - OLLAMA_BASE_URL=http://host.docker.internal:11434
+  #     - MINIMAX_API_KEY=${MINIMAX_API_KEY:-}
+  #     - GMAIL_USER=${GMAIL_USER:-}
+  #     - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD:-}
+  #     - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+  #     - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY:-}
+  #     - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+  #     - ZALO_OA_ACCESS_TOKEN=${ZALO_OA_ACCESS_TOKEN:-}
+  #     - ZALO_OA_SECRET_KEY=${ZALO_OA_SECRET_KEY:-}
+  #   working_dir: /app/src
+  #   command: >
+  #     sh -c "
+  #       pip install fastapi uvicorn &&
+  #       python main.py
+  #     "
+  #   networks:
+  #     - openwebui-network
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   healthcheck:
+  #     test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+
+volumes:
+  litellm_logs:
+    driver: local
+  litellm_cache:
+    driver: local
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  jupyter-notebooks:
+    driver: local
+  code-executions:
+    driver: local
+  browser-screenshots:
+    driver: local
+  browser-data:
+    driver: local
+  code-workspace:
+    driver: local
+  code-outputs:
+    driver: local
+  deployment-workspace:
+    driver: local
+  mcp-workspace:
+    driver: local
+
+networks:
+  openwebui-network:
+    driver: bridge
+
