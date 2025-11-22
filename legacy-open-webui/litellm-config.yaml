@@ -1,0 +1,214 @@
+# LiteLLM Proxy Configuration for Open WebUI Stack
+# Advanced routing with load balancing, fallback, and monitoring
+
+general_settings:
+  database_url: sqlite:///litellm/litellm.db
+  master_key: "your-super-secret-key-change-this"
+  suppress_group_messages: true
+  enable_pre_call_cache: true
+  store_model_in_db: true
+
+model_list:
+  # Tier 1: Premium Free Models (High Priority)
+  - model_name: cerebras-llama-70b
+    litellm_params:
+      model: cerebras/llama-3.1-70b-instruct
+      api_base: https://api.cerebras.ai/v1
+      api_key: ${CEREBRAS_API_KEY}
+      max_tokens: 32000
+      temperature: 0.7
+    model_group: cerebras
+    priority: 1
+    
+  - model_name: cerebras-llama-8b
+    litellm_params:
+      model: cerebras/llama-3.1-8b-instruct
+      api_base: https://api.cerebras.ai/v1
+      api_key: ${CEREBRAS_API_KEY}
+      max_tokens: 32000
+      temperature: 0.7
+    model_group: cerebras
+    priority: 1
+
+  # Tier 2: Cloudflare Workers AI (High Availability)
+  - model_name: cloudflare-llama-8b
+    litellm_params:
+      model: cloudflare/llama-3.1-8b-instruct-vision
+      api_base: https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/v1
+      api_key: ${CLOUDFLARE_API_KEY}
+      max_tokens: 32768
+      temperature: 0.7
+    model_group: cloudflare
+    priority: 2
+    
+  - model_name: cloudflare-mixtral
+    litellm_params:
+      model: cloudflare/mixtral-8x7b-instruct-v01
+      api_base: https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/v1
+      api_key: ${CLOUDFLARE_API_KEY}
+      max_tokens: 32768
+      temperature: 0.7
+    model_group: cloudflare
+    priority: 2
+
+  # Tier 3: GitHub Models (Multimodal)
+  - model_name: github-gpt4o-mini
+    litellm_params:
+      model: github/gpt-4o-mini
+      api_base: https://models.inference.ai.azure.com
+      api_key: ${GITHUB_TOKEN}
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: github
+    priority: 3
+    
+  - model_name: github-claude-sonnet
+    litellm_params:
+      model: github/claude-3-5-sonnet-20241022
+      api_base: https://models.inference.ai.azure.com
+      api_key: ${GITHUB_TOKEN}
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: github
+    priority: 3
+
+  # Tier 4: OpenRouter (Model Variety)
+  - model_name: openrouter-deepseek-r1
+    litellm_params:
+      model: openrouter/deepseek/deepseek-r1-671b:free
+      api_base: https://openrouter.ai/api/v1
+      api_key: ${OPENROUTER_API_KEY}
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: openrouter
+    priority: 4
+    
+  - model_name: openrouter-llama-70b
+    litellm_params:
+      model: openrouter/meta-llama/llama-3.1-70b-instruct:free
+      api_base: https://openrouter.ai/api/v1
+      api_key: ${OPENROUTER_API_KEY}
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: openrouter
+    priority: 4
+
+  # Tier 5: Google AI Studio
+  - model_name: google-gemini-pro
+    litellm_params:
+      model: google/gemini-2.5-pro
+      api_base: https://generativelanguage.googleapis.com/v1
+      api_key: ${GOOGLE_API_KEY}
+      max_tokens: 1048576
+      temperature: 0.7
+    model_group: google
+    priority: 5
+    
+  - model_name: google-gemini-flash
+    litellm_params:
+      model: google/gemini-2.5-flash
+      api_base: https://generativelanguage.googleapis.com/v1
+      api_key: ${GOOGLE_API_KEY}
+      max_tokens: 1048576
+      temperature: 0.7
+    model_group: google
+    priority: 5
+
+  # Tier 6: Together AI
+  - model_name: together-llama-4-scout
+    litellm_params:
+      model: together/meta-llama/llama-4-scout-34b
+      api_base: https://api.together.xyz/v1
+      api_key: ${TOGETHER_API_KEY}
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: together
+    priority: 6
+
+  # Tier 7: Local Models (Ollama)
+  - model_name: ollama-llama-70b
+    litellm_params:
+      model: openai/llama-3.1-70b-instruct
+      api_base: http://ollama:11434/v1
+      api_key: "ollama"
+      max_tokens: 32000
+      temperature: 0.7
+    model_group: ollama_local
+    priority: 99
+
+  # Tier 8: Emergency - Puter.js
+  - model_name: puter-claude
+    litellm_params:
+      model: anthropic/claude-3.5-sonnet
+      api_base: https://api.puter.com/v1
+      api_key: "puter"
+      max_tokens: 131072
+      temperature: 0.7
+    model_group: puter
+    priority: 100
+
+# Routing Configuration
+litellm_router_settings:
+  default_model: cerebras-llama-70b
+  fallback_models: 
+    - cloudflare-llama-8b
+    - github-gpt4o-mini
+    - openrouter-deepseek-r1
+  allowed_fallback_models: true
+  num_retries: 3
+  request_timeout: 60
+
+# Advanced Routing Rules
+routing_rules:
+  - model_group: cerebras
+    allowed_roles: ["premium", "premium_plus"]
+    rate_limits:
+      rpm: 600
+      rph: 10000
+      
+  - model_group: cloudflare  
+    allowed_roles: ["standard", "premium", "premium_plus"]
+    rate_limits:
+      rpm: 100
+      rph: 2000
+      
+  - model_group: github
+    allowed_roles: ["standard", "premium", "premium_plus"]
+    rate_limits:
+      rpm: 20
+      rph: 400
+
+# Health Check Configuration
+health_check_settings:
+  enabled: true
+  interval: 30  # seconds
+  timeout: 10   # seconds
+  retries: 3
+  model_groups:
+    - cerebras
+    - cloudflare
+    - github
+
+# Budget and Usage Control
+budget_per_model_group:
+  cerebras:
+    budget_per_month: 1000
+    budget_per_day: 50
+  cloudflare:
+    budget_per_month: 500
+    budget_per_day: 25
+  github:
+    budget_per_month: 200
+    budget_per_day: 10
+
+# Alert Settings
+alert_settings:
+  webhook_url: null  # Set your Discord/Slack webhook
+  email: "admin@yourcompany.com"
+  on_spend_limit:
+    enabled: true
+    percentage: 80  # Alert at 80% usage
+  
+  on_model_group_failure:
+    enabled: true
+    threshold: 3  # Alert after 3 consecutive failures

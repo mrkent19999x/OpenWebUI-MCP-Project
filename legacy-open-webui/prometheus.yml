@@ -1,0 +1,79 @@
+# Prometheus Configuration for Open WebUI Stack
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Open WebUI Main
+  - job_name: 'open-webui'
+    static_configs:
+      - targets: ['open-webui-main:8080']
+    metrics_path: '/api/v1/metrics'
+    scrape_interval: 30s
+
+  # LiteLLM Proxy
+  - job_name: 'litellm-proxy'
+    static_configs:
+      - targets: ['litellm-proxy:4000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # LobeChat
+  - job_name: 'lobe-chat'
+    static_configs:
+      - targets: ['lobe-chat:3000']
+    scrape_interval: 30s
+
+  # AnythingLLM
+  - job_name: 'anything-llm'
+    static_configs:
+      - targets: ['anything-llm:3001']
+    scrape_interval: 30s
+
+  # Ollama
+  - job_name: 'ollama'
+    static_configs:
+      - targets: ['ollama:11434']
+    scrape_interval: 30s
+
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+
+  # Nginx
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:80']
+    scrape_interval: 30s
+
+  # Node Exporter (if added)
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
+
+  # cAdvisor (if added for container monitoring)
+  # - job_name: 'cadvisor'
+  #   static_configs:
+  #     - targets: ['cadvisor:8080']
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# Rule files can contain multiple rule groups.
